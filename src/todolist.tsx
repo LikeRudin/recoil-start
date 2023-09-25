@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-
+import { useForm } from "react-hook-form";
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -34,35 +34,26 @@ border-radius: 5px;
 font-size: large`;
 
 export const TodoList = () => {
-  const [todo, setTodo] = useState("");
-  const [todoList, setTodoList] = useState<string[]>([]);
+  const { register, handleSubmit, formState } = useForm();
 
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setTodoList((todoList) => [...todoList, todo]);
-    setTodo("");
+  const onValid = (data: Object) => {
+    console.log(data);
   };
-
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const {
-      currentTarget: { value },
-    } = event;
-    setTodo(value);
-  };
+  console.log(formState.errors);
 
   return (
     <Wrapper>
       <Container>
-        <Form onSubmit={onSubmit}>
-          <Input value={todo} onChange={onChange} placeholder="todoInput" />
+        <Form onSubmit={handleSubmit(onValid)}>
+          <Input
+            {...register("todo", { required: true, minLength: 3 })}
+            placeholder="todoInput"
+          />
+          <Input {...register("detail", { required: true, minLength: 5 })} />
           <Button value="Submit" />
         </Form>
       </Container>
-      <Ul>
-        {todoList.length > 0
-          ? todoList.map((item, index) => <Li key={index}>{item}</Li>)
-          : "null"}
-      </Ul>
+      <Ul></Ul>
     </Wrapper>
   );
 };
