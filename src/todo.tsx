@@ -11,16 +11,19 @@ interface TodoProps {
 
 export const Todo = ({ text, id, category }: TodoProps) => {
   const categories = ["TODO", "DOING", "DONE"];
+
   const setTodoCategory = useSetRecoilState(TodosAtom);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const name = event.currentTarget.name as TodoProps["category"];
-    setTodoCategory((todos) => {
-      const [targetTodo] = todos.filter(({ id: todoId }) => id === todoId);
-      return [
-        ...todos.filter(({ id: todoId }) => id !== todoId),
-        { ...targetTodo, category: name },
-      ];
-    });
+    setTodoCategory((todos) =>
+      todos.map((item) => {
+        if (item["id"] !== id) {
+          return item;
+        }
+        return { ...item, category: name };
+      })
+    );
   };
 
   return (
