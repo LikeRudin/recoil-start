@@ -11,6 +11,11 @@ export const TodosAtom = atom<ITodo[]>({
   default: [],
 });
 
+export const CategoriesAtom = atom<ITodo["category"]>({
+  key: "categories",
+  default: "TODO",
+});
+
 export const todoSelector = selector<ITodo[][]>({
   key: "todosSelector",
   get: ({ get }) => {
