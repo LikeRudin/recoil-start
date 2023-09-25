@@ -1,5 +1,7 @@
 import { createGlobalStyle } from "styled-components";
 import { TodoList } from "./todolist";
+import { CreateTodo } from "./create-todo";
+import styled from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -24,11 +26,23 @@ time, mark, audio, video {
   vertical-align: baseline;
 }`;
 
+const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
 export const App = () => {
   return (
     <>
       <GlobalStyle />
-      <TodoList />
+      <Wrapper>
+        <CreateTodo />
+        <TodoList />
+      </Wrapper>
     </>
   );
 };
