@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useRecoilState, atom } from "recoil";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
+
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -37,12 +38,29 @@ interface IForm {
   todo: string;
 }
 
+interface ITodo {
+  text: string;
+  id: string;
+  category: "TODO" | "DOING" | "DONE";
+}
+
+const TodosAtom = atom<ITodo[]>({
+  key: "todos",
+  default: [],
+});
+
 export const TodoList = () => {
+  const [todos, setTodos] = useRecoilState(TodosAtom);
   const { register, handleSubmit, setValue } = useForm<IForm>();
 
-  const onValid = (data: IForm) => {
-    console.log(data.todo);
-    setValue("todo", "hello");
+  const onValid = ({ todo }: IForm) => {
+    const newTodo: ITodo = {
+      text: todo,
+      id: String(new Date()),
+      category: "TODO",
+    };
+    setTodos((acc) => [newTodo, ...acc]);
+    setValue("todo", "");
   };
   return (
     <Wrapper>
@@ -55,7 +73,16 @@ export const TodoList = () => {
           <Button value="Submit" />
         </Form>
       </Container>
-      <Ul></Ul>
+      <Ul>
+        {todos.length
+          ? todos.map(({ text, id, category }) => (
+              <Li key={id}>
+                {" "}
+                {category} : {text}{" "}
+              </Li>
+            ))
+          : null}
+      </Ul>
     </Wrapper>
   );
 };
