@@ -33,14 +33,17 @@ border: solid black:2px;
 border-radius: 5px;
 font-size: large`;
 
+interface IForm {
+  todo: string;
+}
+
 export const TodoList = () => {
-  const { register, handleSubmit, formState } = useForm();
+  const { register, handleSubmit, setValue } = useForm<IForm>();
 
-  const onValid = (data: Object) => {
-    console.log(data);
+  const onValid = (data: IForm) => {
+    console.log(data.todo);
+    setValue("todo", "hello");
   };
-  console.log(formState.errors);
-
   return (
     <Wrapper>
       <Container>
@@ -49,7 +52,6 @@ export const TodoList = () => {
             {...register("todo", { required: true, minLength: 3 })}
             placeholder="todoInput"
           />
-          <Input {...register("detail", { required: true, minLength: 5 })} />
           <Button value="Submit" />
         </Form>
       </Container>
