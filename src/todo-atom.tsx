@@ -12,16 +12,21 @@ export const TodosAtom = atom<ITodo[]>({
 });
 
 export const CategoriesAtom = atom<ITodo["category"]>({
-  key: "categories",
+  key: "category",
   default: "TODO",
 });
 
-export const todoSelector = selector<ITodo[][]>({
+export const todoSelector = selector<ITodo[]>({
   key: "todosSelector",
   get: ({ get }) => {
     const todos = get(TodosAtom);
-    return ["TODO", "DOING", "DONE"].map((kind) =>
-      todos.filter(({ category }) => category === kind)
-    );
+    const category = get(CategoriesAtom);
+    return todos.filter((toDo) => toDo.category === category);
   },
 });
+
+export const enum CATEGORIES {
+  "TODO" = "TODO",
+  "DOING" = "DOING",
+  "DONE" = "DONE",
+}
