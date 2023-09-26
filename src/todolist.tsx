@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import { TodosAtom } from "./todo-atom";
-import { useRecoilValue } from "recoil";
+import { CATEGORIES, TodosAtom } from "./todo-atom";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { Todo } from "./todo";
-import { todoSelector } from "./todo-atom";
+import { todoSelector, CategoriesAtom } from "./todo-atom";
+import React from "react";
 
 const Ul = styled.ul`
   height: 40%;
@@ -16,33 +17,27 @@ const Li = styled(Todo)`
   font-size: large
 `;
 
+const Select = styled.select``;
+
+const Option = styled.option``;
+
 export const TodoList = () => {
-  const todos = useRecoilValue(TodosAtom);
-  const [todoList, doingList, doneList] = useRecoilValue(todoSelector);
+  const todos = useRecoilValue(todoSelector);
+  const [category, setCategory] = useRecoilState(CategoriesAtom);
+  const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
+    setCategory(event.currentTarget.value as CATEGORIES);
+  };
   return (
     <>
       <Ul>
-        <h1>Alls</h1>
+        <h1>Tasks</h1>
         {todos.length ? todos.map((todoAtom) => <Li {...todoAtom} />) : null}
       </Ul>
-      <Ul>
-        <h1>Todos</h1>
-        {todoList.length
-          ? todoList.map((todoAtom) => <Li {...todoAtom} />)
-          : null}
-      </Ul>
-      <Ul>
-        <h1>Doings</h1>
-        {doingList.length
-          ? doingList.map((todoAtom) => <Li {...todoAtom} />)
-          : null}
-      </Ul>
-      <Ul>
-        <h1>Dones</h1>
-        {doneList.length
-          ? doneList.map((todoAtom) => <Li {...todoAtom} />)
-          : null}
-      </Ul>
+      <Select value={category} onInput={onInput}>
+        <Option value={CATEGORIES.TODO}>{CATEGORIES.TODO}</Option>
+        <Option value={CATEGORIES.DOING}>{CATEGORIES.DOING}</Option>
+        <Option value={CATEGORIES.DONE}>{CATEGORIES.DONE}</Option>
+      </Select>
     </>
   );
 };
