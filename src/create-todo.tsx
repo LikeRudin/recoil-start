@@ -1,7 +1,7 @@
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
-import { TodosAtom } from "./todo-atom";
+import { TodosAtom, CategoriesAtom } from "./todo-atom";
 
 const Container = styled.div`
   height: 50%;
@@ -23,6 +23,7 @@ interface IForm {
 
 export const CreateTodo = () => {
   const setTodos = useSetRecoilState(TodosAtom);
+  const category = useRecoilValue(CategoriesAtom);
   const { register, handleSubmit, setValue } = useForm<IForm>();
 
   const onValid = ({ todo }: IForm) => {
@@ -30,7 +31,7 @@ export const CreateTodo = () => {
       {
         text: todo,
         id: String(new Date()),
-        category: "TODO",
+        category,
       },
       ...acc,
     ]);
@@ -40,8 +41,11 @@ export const CreateTodo = () => {
     <Container>
       <Form onSubmit={handleSubmit(onValid)}>
         <Input
-          {...register("todo", { required: true, minLength: 3 })}
-          placeholder="todoInput"
+          {...register("todo", {
+            required: "write a todo than blank space",
+            minLength: 3,
+          })}
+          placeholder="what is your todo?"
         />
         <Button value="Submit" />
       </Form>
