@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useSetRecoilState } from "recoil";
-import { TodosAtom } from "./todo-atom";
+import { TodosAtom, saveTodos } from "./todo-atom";
 const Button = styled.button``;
 
 interface TodoProps {
@@ -12,18 +12,28 @@ interface TodoProps {
 export const Todo = ({ text, id, category }: TodoProps) => {
   const categories = ["TODO", "DOING", "DONE"];
 
-  const setTodoCategory = useSetRecoilState(TodosAtom);
+  const setTodos = useSetRecoilState(TodosAtom);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const name = event.currentTarget.name as TodoProps["category"];
-    setTodoCategory((todos) =>
-      todos.map((item) => {
+    setTodos((todos) => {
+      const newTodos = todos.map((item) => {
         if (item["id"] !== id) {
           return item;
         }
         return { ...item, category: name };
-      })
-    );
+      });
+      saveTodos(newTodos);
+      return newTodos;
+    });
+  };
+
+  const handleDeleteClick = () => {
+    setTodos((todos) => {
+      const newTodos = todos.filter((item) => item["id"] !== id);
+      saveTodos(newTodos);
+      return newTodos;
+    });
   };
 
   return (
@@ -38,6 +48,9 @@ export const Todo = ({ text, id, category }: TodoProps) => {
             {kind}
           </Button>
         ))}
+      <Button name="delete" onClick={handleDeleteClick}>
+        delete
+      </Button>
     </>
   );
 };

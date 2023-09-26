@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { CATEGORIES, TodosAtom } from "./todo-atom";
+import { CATEGORIES, saveCategory } from "./todo-atom";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { Todo } from "./todo";
 import { todoSelector, CategoriesAtom } from "./todo-atom";
@@ -24,8 +24,11 @@ const Option = styled.option``;
 export const TodoList = () => {
   const todos = useRecoilValue(todoSelector);
   const [category, setCategory] = useRecoilState(CategoriesAtom);
+
   const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
-    setCategory(event.currentTarget.value as CATEGORIES);
+    const category = event.currentTarget.value as CATEGORIES;
+    setCategory(category);
+    saveCategory(category);
   };
   return (
     <>

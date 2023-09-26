@@ -30,3 +30,23 @@ export const enum CATEGORIES {
   "DOING" = "DOING",
   "DONE" = "DONE",
 }
+
+export const loadTodos = (): ITodo[] | null => {
+  const todosString = localStorage.getItem("todos") || "null";
+  const todos = JSON.parse(todosString);
+  return todos;
+};
+
+export const saveTodos = (newTodos: ITodo[]) => {
+  localStorage.setItem("todos", JSON.stringify(newTodos));
+};
+
+export const loadCategory = (): CATEGORIES => {
+  const category =
+    (localStorage.getItem("category") as CATEGORIES) || CATEGORIES.TODO;
+  return category;
+};
+
+export const saveCategory = (category: CATEGORIES) => {
+  localStorage.setItem("category", category);
+};

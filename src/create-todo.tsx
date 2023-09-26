@@ -1,7 +1,7 @@
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
-import { TodosAtom, CategoriesAtom } from "./todo-atom";
+import { TodosAtom, CategoriesAtom, saveTodos } from "./todo-atom";
 
 const Container = styled.div`
   height: 50%;
@@ -27,14 +27,18 @@ export const CreateTodo = () => {
   const { register, handleSubmit, setValue } = useForm<IForm>();
 
   const onValid = ({ todo }: IForm) => {
-    setTodos((acc) => [
-      {
-        text: todo,
-        id: String(new Date()),
-        category,
-      },
-      ...acc,
-    ]);
+    setTodos((acc) => {
+      const newTodos = [
+        {
+          text: todo,
+          id: String(new Date()),
+          category,
+        },
+        ...acc,
+      ];
+      saveTodos(newTodos);
+      return newTodos;
+    });
     setValue("todo", "");
   };
   return (
