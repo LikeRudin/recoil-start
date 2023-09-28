@@ -16,9 +16,10 @@ const Board = styled.div<IBoardProps>`
 
 const Li = styled(Todo)`
   height:15%;
+  width: 100%;
   border: solid black:2px;
   border-radius: 5px;
-  font-size: large
+  font-size: large;
 `;
 
 export const TodoList = () => {
@@ -41,6 +42,7 @@ export const TodoList = () => {
                   <Li {...todoAtom} index={index} />
                 ))
               : null}
+            {provided.placeholder}
           </Board>
         )}
       </Droppable>

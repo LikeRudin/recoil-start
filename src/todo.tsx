@@ -2,10 +2,13 @@ import styled from "styled-components";
 import { useSetRecoilState } from "recoil";
 import { TodosAtom, saveTodos } from "./todo-atom";
 import { Draggable } from "react-beautiful-dnd";
+import { memo } from "react";
 
 const Button = styled.button``;
 
-const Bar = styled.div<{ isDragging: boolean }>``;
+const Bar = styled.div<{ isDragging: boolean }>`
+  background-color: tomato;
+`;
 
 const ButtonWrapper = styled.div``;
 
@@ -18,7 +21,7 @@ interface TodoProps {
   category: "TODO" | "DOING" | "DONE";
 }
 
-export const Todo = ({ text, id, category, index }: TodoProps) => {
+const TodoBar = ({ text, id, category, index }: TodoProps) => {
   const categories = ["TODO", "DOING", "DONE"];
 
   const setTodos = useSetRecoilState(TodosAtom);
@@ -46,7 +49,7 @@ export const Todo = ({ text, id, category, index }: TodoProps) => {
   };
 
   return (
-    <Draggable draggableId={id} index={index}>
+    <Draggable draggableId={String(index)} index={index}>
       {(provided, snapshot) => (
         <Bar
           isDragging={snapshot.isDragging}
@@ -72,3 +75,5 @@ export const Todo = ({ text, id, category, index }: TodoProps) => {
     </Draggable>
   );
 };
+
+export const Todo = memo(TodoBar);

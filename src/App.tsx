@@ -8,6 +8,7 @@ import {
   TodosAtom,
   CategoriesAtom,
   loadCategory,
+  saveTodos,
 } from "./todo-atom";
 import { useSetRecoilState } from "recoil";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
@@ -56,6 +57,7 @@ export const App = () => {
       const newTodos = [...todos];
       newTodos.splice(source["index"], 1);
       newTodos.splice(destination["index"], 0, target);
+      saveTodos(newTodos);
       return newTodos;
     });
   };

@@ -31,7 +31,7 @@ export const CreateTodo = () => {
       const newTodos = [
         {
           text: todo,
-          id: String(new Date()),
+          id: String(Date.now()),
           category,
         },
         ...acc,
