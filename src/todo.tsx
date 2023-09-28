@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useSetRecoilState } from "recoil";
 import { TodosAtom, saveTodos } from "./todo-atom";
 import { Draggable } from "react-beautiful-dnd";
-import React, { memo, useState } from "react";
+import React, { memo, useState, useEffect } from "react";
 
 const Button = styled.button``;
 
@@ -65,6 +65,9 @@ const TodoBar = ({ text, id, category, index }: TodoProps) => {
       return newTodos;
     });
   };
+  useEffect(() => {
+    setTodoText(text); // Initialize todoText with the current text when it changes
+  }, [text]);
 
   return (
     <Draggable draggableId={String(index)} index={index}>
