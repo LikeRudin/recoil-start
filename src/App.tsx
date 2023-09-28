@@ -10,6 +10,7 @@ import {
   loadCategory,
 } from "./todo-atom";
 import { useSetRecoilState } from "recoil";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
 html, body, div, span, applet, object, iframe,
@@ -46,6 +47,19 @@ export const App = () => {
   const setTodos = useSetRecoilState(TodosAtom);
   const setCategory = useSetRecoilState(CategoriesAtom);
 
+  const onDragEnd = ({ destination, source }: DropResult) => {
+    if (!destination) {
+      return;
+    }
+    setTodos((todos) => {
+      const target = todos[source["index"]];
+      const newTodos = [...todos];
+      newTodos.splice(source["index"], 1);
+      newTodos.splice(destination["index"], 0, target);
+      return newTodos;
+    });
+  };
+
   useEffect(() => {
     const todos = loadTodos();
     if (todos) {
@@ -60,7 +74,9 @@ export const App = () => {
       <GlobalStyle />
       <Wrapper>
         <CreateTodo />
-        <TodoList />
+        <DragDropContext onDragEnd={onDragEnd}>
+          <TodoList />
+        </DragDropContext>
       </Wrapper>
     </>
   );

@@ -1,46 +1,49 @@
 import styled from "styled-components";
-import { CATEGORIES, saveCategory } from "./todo-atom";
+import { CATEGORIES, TodosAtom } from "./todo-atom";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { Todo } from "./todo";
-import { todoSelector, CategoriesAtom } from "./todo-atom";
-import React from "react";
+import { Droppable } from "react-beautiful-dnd";
 
-const Ul = styled.ul`
-  height: 40%;
+interface IBoardProps {
+  isDraggingOver: boolean;
+  isDraggingFromThis: boolean;
+}
+const Board = styled.div<IBoardProps>`
+  height: 100%;
   width: auto;
   overflow-y: auto;
 `;
 
 const Li = styled(Todo)`
+  height:15%;
   border: solid black:2px;
   border-radius: 5px;
   font-size: large
 `;
 
-const Select = styled.select``;
-
-const Option = styled.option``;
-
 export const TodoList = () => {
-  const todos = useRecoilValue(todoSelector);
-  const [category, setCategory] = useRecoilState(CategoriesAtom);
+  const todos = useRecoilValue(TodosAtom);
 
-  const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
-    const category = event.currentTarget.value as CATEGORIES;
-    setCategory(category);
-    saveCategory(category);
-  };
   return (
     <>
-      <Ul>
-        <h1>Tasks</h1>
-        {todos.length ? todos.map((todoAtom) => <Li {...todoAtom} />) : null}
-      </Ul>
-      <Select value={category} onInput={onInput}>
-        <Option value={CATEGORIES.TODO}>{CATEGORIES.TODO}</Option>
-        <Option value={CATEGORIES.DOING}>{CATEGORIES.DOING}</Option>
-        <Option value={CATEGORIES.DONE}>{CATEGORIES.DONE}</Option>
-      </Select>
+      <Droppable droppableId="todo">
+        {(provided, snapshot) => (
+          <Board
+            isDraggingOver={snapshot.isDraggingOver}
+            isDraggingFromThis={snapshot.isDraggingOver}
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            <h1>Tasks</h1>
+
+            {todos.length
+              ? todos.map((todoAtom, index) => (
+                  <Li {...todoAtom} index={index} />
+                ))
+              : null}
+          </Board>
+        )}
+      </Droppable>
     </>
   );
 };

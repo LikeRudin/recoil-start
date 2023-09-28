@@ -1,15 +1,24 @@
 import styled from "styled-components";
 import { useSetRecoilState } from "recoil";
 import { TodosAtom, saveTodos } from "./todo-atom";
+import { Draggable } from "react-beautiful-dnd";
+
 const Button = styled.button``;
+
+const Bar = styled.div<{ isDragging: boolean }>``;
+
+const ButtonWrapper = styled.div``;
+
+const Span = styled.span``;
 
 interface TodoProps {
   text: string;
   id: string;
+  index: number;
   category: "TODO" | "DOING" | "DONE";
 }
 
-export const Todo = ({ text, id, category }: TodoProps) => {
+export const Todo = ({ text, id, category, index }: TodoProps) => {
   const categories = ["TODO", "DOING", "DONE"];
 
   const setTodos = useSetRecoilState(TodosAtom);
@@ -37,20 +46,29 @@ export const Todo = ({ text, id, category }: TodoProps) => {
   };
 
   return (
-    <>
-      <li key={id}>
-        {category} : {text}
-      </li>
-      {categories
-        .filter((kind) => kind !== category)
-        .map((kind) => (
-          <Button name={kind} onClick={handleClick}>
-            {kind}
-          </Button>
-        ))}
-      <Button name="delete" onClick={handleDeleteClick}>
-        delete
-      </Button>
-    </>
+    <Draggable draggableId={id} index={index}>
+      {(provided, snapshot) => (
+        <Bar
+          isDragging={snapshot.isDragging}
+          ref={provided.innerRef}
+          {...provided.dragHandleProps}
+          {...provided.draggableProps}
+        >
+          <Span>{text}</Span>
+          <ButtonWrapper>
+            {categories
+              .filter((kind) => kind !== category)
+              .map((kind) => (
+                <Button name={id} onClick={handleClick}>
+                  {kind}
+                </Button>
+              ))}
+            <Button name={id} onClick={handleDeleteClick}>
+              🗑
+            </Button>
+          </ButtonWrapper>
+        </Bar>
+      )}
+    </Draggable>
   );
 };
