@@ -16,6 +16,11 @@ export const CategoriesAtom = atom<ITodo["category"]>({
   default: "TODO",
 });
 
+export const boardListState = atom<string[]>({
+  key: "boardList",
+  default: ["TODO"],
+});
+
 export const todoSelector = selector<ITodo[]>({
   key: "todosSelector",
   get: ({ get }) => {

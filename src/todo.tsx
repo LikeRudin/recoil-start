@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useSetRecoilState } from "recoil";
 import { TodosAtom, saveTodos } from "./todo-atom";
 import { Draggable } from "react-beautiful-dnd";
-import { memo } from "react";
+import React, { memo, useState } from "react";
 
 const Button = styled.button``;
 
@@ -12,7 +12,7 @@ const Bar = styled.div<{ isDragging: boolean }>`
 
 const ButtonWrapper = styled.div``;
 
-const Span = styled.span``;
+const Input = styled.input``;
 
 interface TodoProps {
   text: string;
@@ -23,6 +23,7 @@ interface TodoProps {
 
 const TodoBar = ({ text, id, category, index }: TodoProps) => {
   const categories = ["TODO", "DOING", "DONE"];
+  const [todoText, setTodoText] = useState(text);
 
   const setTodos = useSetRecoilState(TodosAtom);
 
@@ -48,6 +49,23 @@ const TodoBar = ({ text, id, category, index }: TodoProps) => {
     });
   };
 
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const targetId = event.currentTarget.name;
+    const newText = event.currentTarget.value;
+    setTodoText(newText);
+
+    setTodos((todos) => {
+      const newTodos = todos.map((todo) => {
+        if (todo["id"] !== targetId) {
+          return todo;
+        }
+        return { ...todo, text: newText };
+      });
+      saveTodos(newTodos);
+      return newTodos;
+    });
+  };
+
   return (
     <Draggable draggableId={String(index)} index={index}>
       {(provided, snapshot) => (
@@ -57,7 +75,7 @@ const TodoBar = ({ text, id, category, index }: TodoProps) => {
           {...provided.dragHandleProps}
           {...provided.draggableProps}
         >
-          <Span>{text}</Span>
+          <Input name={id} value={todoText} onChange={onChange}></Input>
           <ButtonWrapper>
             {categories
               .filter((kind) => kind !== category)

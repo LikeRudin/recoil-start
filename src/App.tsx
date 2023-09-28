@@ -53,9 +53,8 @@ export const App = () => {
       return;
     }
     setTodos((todos) => {
-      const target = todos[source["index"]];
       const newTodos = [...todos];
-      newTodos.splice(source["index"], 1);
+      const [target] = newTodos.splice(source["index"], 1);
       newTodos.splice(destination["index"], 0, target);
       saveTodos(newTodos);
       return newTodos;
