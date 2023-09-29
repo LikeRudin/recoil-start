@@ -1,7 +1,7 @@
 import { DragDropContext, DropResult, Droppable } from "react-beautiful-dnd";
 import BoardForList from "./board-for-list";
 import { boardsState } from "./atoms";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -24,10 +24,28 @@ const DropSpace = styled.div`
 const Input = styled.input``;
 
 const Boards = () => {
-  const boards = useRecoilValue(boardsState);
+  const [boards, setBoards] = useRecoilState(boardsState);
   const onDragEnd = ({ source, destination }: DropResult) => {
+    if (!destination) {
+      return;
+    } else if (
+      source["droppableId"] === "main" &&
+      destination["droppableId"] === "main"
+    ) {
+      setBoards((boards) => {
+        const newBoards = [...boards];
+        const [target] = newBoards.splice(source["index"], 1);
+        newBoards.splice(destination["index"], 0, target);
+        return newBoards;
+      });
+    }
+    console.log("source");
     console.log(source);
+    console.log("destination");
     console.log(destination);
+    //is different Board
+    //is Same Board
+    //is Same list
   };
   return (
     <Wrapper>

@@ -24,11 +24,6 @@ const Input = styled.input``;
 
 const BoardForList = ({ id, index }: BoardForListProps) => {
   const lists = useRecoilValue(listsState);
-  console.log(`lists`);
-  console.log(lists);
-  console.log("id");
-  console.log(id);
-  console.log(lists[id]);
   return (
     <Draggable draggableId={id} index={index}>
       {(provided) => (
