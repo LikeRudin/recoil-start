@@ -66,7 +66,7 @@ const TodoBar = ({ text, id, category, index }: TodoProps) => {
     });
   };
   useEffect(() => {
-    setTodoText(text); // Initialize todoText with the current text when it changes
+    setTodoText(text);
   }, [text]);
 
   return (
