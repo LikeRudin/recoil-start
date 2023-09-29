@@ -12,6 +12,11 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100%;
 `;
+
+// interface IDropSpace {
+//   isDraggingOver: boolean;
+// }
+
 const DropSpace = styled.div`
   display: flex;
   flex-direction: column;
@@ -28,18 +33,24 @@ const Boards = () => {
   const onDragEnd = ({ source, destination }: DropResult) => {
     if (!destination) {
       return;
-    } else if (
-      source["droppableId"] === "main" &&
-      destination["droppableId"] === "main"
-    ) {
+    }
+    const [sourceId, destinationId] = [
+      source["droppableId"],
+      destination["droppableId"],
+    ];
+    const [sourceIndex, destinationIndex] = [
+      source["index"],
+      destination["index"],
+    ];
+
+    if (sourceId === "main" && destinationId === "main") {
       setBoards((boards) => {
         const newBoards = [...boards];
-        const [target] = newBoards.splice(source["index"], 1);
-        newBoards.splice(destination["index"], 0, target);
+        const [target] = newBoards.splice(sourceIndex, 1);
+        newBoards.splice(destinationIndex, 0, target);
         return newBoards;
       });
-    }
-    console.log("source");
+    } else if (source) console.log("source");
     console.log(source);
     console.log("destination");
     console.log(destination);
@@ -53,13 +64,9 @@ const Boards = () => {
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="main">
           {(provided) => (
-            <DropSpace
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              key="main"
-            >
+            <DropSpace {...provided.droppableProps} ref={provided.innerRef}>
               {boards.map((item, index) => (
-                <BoardForList id={item} index={index} />
+                <BoardForList id={item} index={index} key={`board-${index}`} />
               ))}
               {provided.placeholder}
             </DropSpace>

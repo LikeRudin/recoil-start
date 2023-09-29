@@ -1,5 +1,10 @@
 import styled from "styled-components";
-import { Droppable, Draggable } from "react-beautiful-dnd";
+import {
+  Droppable,
+  Draggable,
+  DragDropContext,
+  DropResult,
+} from "react-beautiful-dnd";
 import Bar from "./bar";
 interface ListForBarProps {
   id: string;
@@ -8,35 +13,39 @@ interface ListForBarProps {
 import { useRecoilValue } from "recoil";
 import { valuesState } from "./atoms";
 const DragSpace = styled.div``;
-const DropSpace = styled.div``;
+const DropSpace = styled.div`
+  background-color: blue;
+`;
 const Input = styled.input``;
 
 const ListForBar = ({ id, index }: ListForBarProps) => {
   const values = useRecoilValue(valuesState)[id];
+  const onDragEnd = ({ source, destination }: DropResult) => {
+    console.log(source);
+    console.log(destination);
+  };
   return (
-    <Draggable draggableId={id} index={index}>
+    <Draggable draggableId={`list-${id}`} index={index}>
       {(provided) => (
-        <DragSpace
-          ref={provided.innerRef}
-          {...provided.dragHandleProps}
-          {...provided.draggableProps}
-        >
+        <DragSpace {...provided.draggableProps} ref={provided.innerRef}>
           <Input value="create Bar" />
-          <h1>{id}</h1>
-          <Droppable droppableId={id}>
-            {(secondProvided) => (
-              <DropSpace
-                ref={secondProvided.innerRef}
-                {...secondProvided.droppableProps}
-                key={id}
-              >
-                {values.map((barProps, index) => (
-                  <Bar {...barProps} index={index} />
-                ))}
-                {secondProvided.placeholder}
-              </DropSpace>
-            )}
-          </Droppable>
+          <h1 {...provided.dragHandleProps}>{id}</h1>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId={"List " + id}>
+              {(secondProvided) => (
+                <DropSpace
+                  {...secondProvided.droppableProps}
+                  ref={secondProvided.innerRef}
+                  key={id}
+                >
+                  {values.map((barProps, index) => (
+                    <Bar {...barProps} index={index} key={`bar-${index}`} />
+                  ))}
+                  {secondProvided.placeholder}
+                </DropSpace>
+              )}
+            </Droppable>
+          </DragDropContext>
         </DragSpace>
       )}
     </Draggable>

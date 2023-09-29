@@ -16,8 +16,8 @@ const Bar = ({ id, index, text }: BarProps) => {
       {(provided) => (
         <DragSpace
           ref={provided.innerRef}
-          {...provided.dragHandleProps}
           {...provided.draggableProps}
+          {...provided.dragHandleProps}
         >
           <Input value={text} />
         </DragSpace>

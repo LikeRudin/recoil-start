@@ -1,4 +1,9 @@
-import { Droppable, Draggable } from "react-beautiful-dnd";
+import {
+  Droppable,
+  Draggable,
+  DragDropContext,
+  DropResult,
+} from "react-beautiful-dnd";
 import styled from "styled-components";
 import BarList from "./list-for-bar";
 import { useRecoilValue } from "recoil";
@@ -14,6 +19,9 @@ const DragSpace = styled.div`
 `;
 
 const DropSpace = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: yellow;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -24,30 +32,32 @@ const Input = styled.input``;
 
 const BoardForList = ({ id, index }: BoardForListProps) => {
   const lists = useRecoilValue(listsState);
+  const onDragEnd = ({ source, destination }: DropResult) => {
+    console.log(source);
+    console.log(destination);
+  };
   return (
-    <Draggable draggableId={id} index={index}>
+    <Draggable draggableId={"draggable" + id} index={index}>
       {(provided) => (
-        <DragSpace
-          ref={provided.innerRef}
-          {...provided.dragHandleProps}
-          {...provided.draggableProps}
-        >
+        <DragSpace ref={provided.innerRef} {...provided.draggableProps}>
           <Input value="Create Lists" />
-          <h1>{id}</h1>
-          <Droppable droppableId={id} key={id}>
-            {(dropProvided) => (
-              <DropSpace
-                ref={dropProvided.innerRef}
-                {...dropProvided.droppableProps}
-                key={id}
-              >
-                {lists[id].map((id, index) => (
-                  <BarList id={id} index={index} />
-                ))}
-                {dropProvided.placeholder}
-              </DropSpace>
-            )}
-          </Droppable>
+          <h1 {...provided.dragHandleProps}>{id}</h1>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId={"Board " + id}>
+              {(dropProvided) => (
+                <DropSpace
+                  {...dropProvided.droppableProps}
+                  key={id}
+                  ref={dropProvided.innerRef}
+                >
+                  {lists[id].map((id, index) => (
+                    <BarList id={id} index={index} key={`list-${index}`} />
+                  ))}
+                  {dropProvided.placeholder}
+                </DropSpace>
+              )}
+            </Droppable>
+          </DragDropContext>
         </DragSpace>
       )}
     </Draggable>
