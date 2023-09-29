@@ -2,16 +2,7 @@ import { createGlobalStyle } from "styled-components";
 import { TodoList } from "./todolist";
 import { CreateTodo } from "./create-todo";
 import styled from "styled-components";
-import { useEffect } from "react";
-import {
-  loadTodos,
-  TodosAtom,
-  CategoriesAtom,
-  loadCategory,
-  saveTodos,
-} from "./todo-atom";
-import { useSetRecoilState } from "recoil";
-import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import Boards from "./boards";
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
 html, body, div, span, applet, object, iframe,
@@ -45,39 +36,11 @@ const Wrapper = styled.div`
 `;
 
 export const App = () => {
-  const setTodos = useSetRecoilState(TodosAtom);
-  const setCategory = useSetRecoilState(CategoriesAtom);
-
-  const onDragEnd = ({ destination, source }: DropResult) => {
-    if (!destination) {
-      return;
-    }
-    setTodos((todos) => {
-      const newTodos = [...todos];
-      const [target] = newTodos.splice(source["index"], 1);
-      newTodos.splice(destination["index"], 0, target);
-      saveTodos(newTodos);
-      return newTodos;
-    });
-  };
-
-  useEffect(() => {
-    const todos = loadTodos();
-    if (todos) {
-      setTodos(todos);
-    }
-    const category = loadCategory();
-    setCategory(category);
-  }, []);
-
   return (
     <>
       <GlobalStyle />
       <Wrapper>
-        <CreateTodo />
-        <DragDropContext onDragEnd={onDragEnd}>
-          <TodoList />
-        </DragDropContext>
+        <Boards />
       </Wrapper>
     </>
   );

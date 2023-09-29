@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
-import { Snapshot } from "recoil";
 
 interface BarProps {
   id: string;
@@ -8,17 +7,16 @@ interface BarProps {
   text: string;
 }
 
-const Element = styled.input``;
+const DragSpace = styled.div``;
 
+const Input = styled.input``;
 const Bar = ({ id, index, text }: BarProps) => {
   return (
-    <Draggable draggableId={String(id)} index={index}>
-      {(provided, Snapshot) => (
-        <Element
-          {...provided.dragHandleProps}
-          {...provided.draggableProps}
-          value={text}
-        />
+    <Draggable draggableId={id} index={index}>
+      {(provided) => (
+        <DragSpace {...provided.dragHandleProps} {...provided.draggableProps}>
+          <Input value={text} />
+        </DragSpace>
       )}
     </Draggable>
   );
