@@ -21,6 +21,8 @@ const DropSpace = styled.div`
   height: 100%;
 `;
 
+const Input = styled.input``;
+
 const Boards = () => {
   const boards = useRecoilValue(boardsState);
   const onDragEnd = ({ source, destination }: DropResult) => {
@@ -29,10 +31,15 @@ const Boards = () => {
   };
   return (
     <Wrapper>
+      <Input value="Create Boards" />
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="main">
           {(provided) => (
-            <DropSpace ref={provided.innerRef} {...provided.droppableProps}>
+            <DropSpace
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              key="main"
+            >
               {boards.map((item, index) => (
                 <BoardForList id={item} index={index} />
               ))}

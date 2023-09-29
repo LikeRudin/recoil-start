@@ -14,7 +14,11 @@ const Bar = ({ id, index, text }: BarProps) => {
   return (
     <Draggable draggableId={id} index={index}>
       {(provided) => (
-        <DragSpace {...provided.dragHandleProps} {...provided.draggableProps}>
+        <DragSpace
+          ref={provided.innerRef}
+          {...provided.dragHandleProps}
+          {...provided.draggableProps}
+        >
           <Input value={text} />
         </DragSpace>
       )}

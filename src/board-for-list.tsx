@@ -20,8 +20,15 @@ const DropSpace = styled.div`
   align-items: flex-start;
 `;
 
+const Input = styled.input``;
+
 const BoardForList = ({ id, index }: BoardForListProps) => {
-  const lists = useRecoilValue(listsState)[id];
+  const lists = useRecoilValue(listsState);
+  console.log(`lists`);
+  console.log(lists);
+  console.log("id");
+  console.log(id);
+  console.log(lists[id]);
   return (
     <Draggable draggableId={id} index={index}>
       {(provided) => (
@@ -30,13 +37,16 @@ const BoardForList = ({ id, index }: BoardForListProps) => {
           {...provided.dragHandleProps}
           {...provided.draggableProps}
         >
-          <Droppable droppableId={id}>
+          <Input value="Create Lists" />
+          <h1>{id}</h1>
+          <Droppable droppableId={id} key={id}>
             {(dropProvided) => (
               <DropSpace
                 ref={dropProvided.innerRef}
                 {...dropProvided.droppableProps}
+                key={id}
               >
-                {lists.map((id, index) => (
+                {lists[id].map((id, index) => (
                   <BarList id={id} index={index} />
                 ))}
                 {dropProvided.placeholder}

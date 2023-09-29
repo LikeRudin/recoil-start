@@ -7,7 +7,7 @@ export interface IBar {
 
 export const boardsState = atom<string[]>({
   key: "boards",
-  default: ["yesterday", "tommorow"],
+  default: ["yesterday", "tomorrow"],
 });
 
 export const listsState = atom<{ [key: string]: string[] }>({
@@ -21,6 +21,14 @@ export const valuesState = atom<{ [key: string]: IBar[] }>({
     TODO: [
       {
         id: "1",
+        text: "hello",
+      },
+      {
+        id: "2",
+        text: "zitto",
+      },
+      {
+        id: "3",
         text: "hello",
       },
     ],

@@ -9,6 +9,7 @@ import { useRecoilValue } from "recoil";
 import { valuesState } from "./atoms";
 const DragSpace = styled.div``;
 const DropSpace = styled.div``;
+const Input = styled.input``;
 
 const ListForBar = ({ id, index }: ListForBarProps) => {
   const values = useRecoilValue(valuesState)[id];
@@ -20,11 +21,14 @@ const ListForBar = ({ id, index }: ListForBarProps) => {
           {...provided.dragHandleProps}
           {...provided.draggableProps}
         >
+          <Input value="create Bar" />
+          <h1>{id}</h1>
           <Droppable droppableId={id}>
             {(secondProvided) => (
               <DropSpace
                 ref={secondProvided.innerRef}
                 {...secondProvided.droppableProps}
+                key={id}
               >
                 {values.map((barProps, index) => (
                   <Bar {...barProps} index={index} />
