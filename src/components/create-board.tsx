@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
-import { IBoard, dataState } from "../atoms";
+import { dataState } from "../atoms";
 interface IonValidArg {
   boardName: string;
 }
@@ -14,12 +14,13 @@ const FormCreatingBoard = () => {
 
   const onValid = ({ boardName }: IonValidArg) => {
     setData((oldData) => {
-      const newBoard: Record<string, []> = {};
-      newBoard[boardName] = [];
-      const newData = [newBoard as IBoard, ...oldData];
+      const newData = [
+        { name: boardName, id: Date.now(), lists: [] },
+        ...oldData,
+      ];
       return newData;
     });
-    setValue("board", "");
+    setValue("boardName", "");
   };
 
   return (
