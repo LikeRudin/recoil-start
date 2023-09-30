@@ -60,7 +60,7 @@ const ListForBar = ({
           <Input value="create Bar" />
           <h1 {...provided.dragHandleProps}>{listName}</h1>
           <Droppable
-            droppableId={`${boardName}-${boardIndex}-${listName}-${listIndex}`}
+            droppableId={`${boardName}-${boardIndex}-${listIndex}`}
             direction="vertical"
             type="row"
           >

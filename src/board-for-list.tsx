@@ -49,7 +49,6 @@ const BoardForList = ({ boardName, boardIndex }: BoardForListProps) => {
   const lists = useRecoilValue(
     listsSelector({
       boardIndex,
-      boardName,
     })
   );
 
@@ -76,10 +75,10 @@ const BoardForList = ({ boardName, boardIndex }: BoardForListProps) => {
                 draggingFromThis={!!dropSnapshot.draggingFromThisWith}
               >
                 {lists.map((list, index) => {
-                  const [[listName, bars]] = Object.entries(list);
+                  const { name, bars } = list;
                   return (
                     <ListForBar
-                      listName={listName}
+                      listName={name}
                       key={`list-${index}`}
                       bars={bars}
                       boardIndex={boardIndex}

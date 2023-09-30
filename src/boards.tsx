@@ -58,50 +58,46 @@ const Boards = () => {
       return;
     }
     if (distAddress.length === 2) {
-      const [distBoardName, distBoardIndex] = distAddress;
-      const [srcBoardName, srcBoardIndex] = srcAddress;
+      const distBoardIndex = distAddress[1];
+      const srcBoardIndex = srcAddress[1];
       console.log("리스트 이동");
       setDatas((oldDatas) => {
         const newDatas = JSON.parse(JSON.stringify(oldDatas));
-        const [target] = newDatas[+srcBoardIndex][srcBoardName].splice(
+        const [target] = newDatas[+srcBoardIndex]["lists"].splice(
           sourceIndex,
           1
         );
-        newDatas[+distBoardIndex][distBoardName].splice(
-          destinationIndex,
-          0,
-          target
-        );
+        newDatas[+distBoardIndex]["lists"].splice(destinationIndex, 0, target);
         console.log(newDatas);
         return newDatas;
       });
       return;
     }
-    if (distAddress.length === 4) {
-      const [distBoardName, distBoardIndex, distListName, distListIndex] =
-        distAddress;
-      const [srcBoardName, srcBoardIndex, srcListName, srcListIndex] =
-        srcAddress;
+    if (distAddress.length === 3) {
+      const [distBoardIndex, distListIndex] = distAddress.slice(1);
+      const [srcBoardIndex, srcListIndex] = srcAddress.slice(1);
       setDatas((oldDatas) => {
         const newDatas = JSON.parse(JSON.stringify(oldDatas));
         if (
           newDatas[srcBoardIndex] &&
-          newDatas[srcBoardIndex][srcBoardName] &&
-          newDatas[srcBoardIndex][srcBoardName][srcListIndex] &&
-          newDatas[srcBoardIndex][srcBoardName][srcListIndex][srcListName]
+          newDatas[srcBoardIndex]["lists"] &&
+          newDatas[srcBoardIndex]["lists"][srcListIndex] &&
+          newDatas[srcBoardIndex]["lists"][srcListIndex]["bars"]
         ) {
-          const [target] = newDatas[srcBoardIndex][srcBoardName][srcListIndex][
-            srcListName
+          const [target] = newDatas[srcBoardIndex]["lists"][srcListIndex][
+            "bars"
           ].splice(sourceIndex, 1);
           if (
             newDatas[distBoardIndex] &&
-            newDatas[distBoardIndex][distBoardName] &&
-            newDatas[distBoardIndex][distBoardName][distListIndex] &&
-            newDatas[distBoardIndex][distBoardName][distListIndex][distListName]
+            newDatas[distBoardIndex]["lists"] &&
+            newDatas[distBoardIndex]["lists"][distListIndex] &&
+            newDatas[distBoardIndex]["lists"][distListIndex]["bars"]
           ) {
-            newDatas[distBoardIndex][distBoardName][distListIndex][
-              distListName
-            ].splice(destinationIndex, 0, target);
+            newDatas[distBoardIndex]["lists"][distListIndex]["bars"].splice(
+              destinationIndex,
+              0,
+              target
+            );
           }
         }
         console.log("요소이동");
@@ -122,13 +118,7 @@ const Boards = () => {
               isDraggingOver={snapshot.isDraggingOver}
             >
               {boards.map((name, index) => {
-                return (
-                  <BoardForList
-                    boardName={name}
-                    boardIndex={index}
-                    key={`board-${index}`}
-                  />
-                );
+                return <BoardForList boardName={name} boardIndex={index} />;
               })}
               {provided.placeholder}
             </DropSpace>
