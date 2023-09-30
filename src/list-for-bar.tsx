@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import Bar from "./bar";
 import { useEffect, useState, memo } from "react";
+import FormCreatingBar from "./components/create-bar";
 interface ListForBarProps {
   listName: string;
   bars: any[];
@@ -57,10 +58,10 @@ const ListForBar = ({
     >
       {(provided) => (
         <DragSpace {...provided.draggableProps} ref={provided.innerRef}>
-          <Input value="create Bar" />
+          <FormCreatingBar boardIndex={boardIndex} listIndex={listIndex} />
           <h1 {...provided.dragHandleProps}>{listName}</h1>
           <Droppable
-            droppableId={`${boardName}-${boardIndex}-${listIndex}`}
+            droppableId={`list-${boardIndex}-${listIndex}`}
             direction="vertical"
             type="row"
           >

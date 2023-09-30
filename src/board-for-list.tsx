@@ -66,7 +66,7 @@ const BoardForList = ({ boardName, boardIndex }: BoardForListProps) => {
           <FormCreatingList boardIndex={boardIndex} />
 
           <Droppable
-            droppableId={`${boardName}-${boardIndex}`}
+            droppableId={`board-${boardIndex}`}
             direction="horizontal"
             type="column"
           >
