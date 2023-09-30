@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 interface ListForBarProps {
   listName: string;
   bars: any[];
-  index: number;
+  listIndex: number;
+  boardIndex: number;
   boardName: string;
 }
 
@@ -22,18 +23,24 @@ const DropSpace = styled.div<IDropSpace>`
   flex-direction: column;
   justify-content: flex-start;
   width: 80%;
-  height: 100%;
+  height: auto;
   padding: 5px;
   background-color: ${(props) =>
     props.isDraggingOver
       ? "pink"
       : props.draggingOverFromThis
       ? "yellow"
-      : "green"};
+      : "transparent"};
 `;
 const Input = styled.input``;
 
-const ListForBar = ({ listName, index, bars, boardName }: ListForBarProps) => {
+const ListForBar = ({
+  listName,
+  listIndex,
+  bars,
+  boardName,
+  boardIndex,
+}: ListForBarProps) => {
   const [listTitle, setListTitle] = useState(listName);
   const values = bars;
   useEffect(() => {
@@ -43,28 +50,32 @@ const ListForBar = ({ listName, index, bars, boardName }: ListForBarProps) => {
   });
   return (
     <Draggable
-      draggableId={`list-${boardName}-${listName}-${index}`}
-      index={index}
+      draggableId={`list-${boardName}-${listName}-${listIndex}`}
+      index={listIndex}
     >
       {(provided) => (
         <DragSpace {...provided.draggableProps} ref={provided.innerRef}>
           <Input value="create Bar" />
           <h1 {...provided.dragHandleProps}>{listName}</h1>
           <Droppable
-            droppableId={`list-${boardName}-${index}`}
+            droppableId={`${boardName}-${boardIndex}-${listName}-${listIndex}`}
             direction="vertical"
             type="row"
           >
             {(dropProvided, dropSnapshot) => (
               <DropSpace
                 {...dropProvided.droppableProps}
-                key={`bar-${index}`}
                 isDraggingOver={dropSnapshot.isDraggingOver}
                 draggingOverFromThis={!!dropSnapshot.draggingFromThisWith}
                 ref={dropProvided.innerRef}
               >
                 {values.map((barInfo, index) => (
-                  <Bar {...barInfo} index={index} boardName={boardName} />
+                  <Bar
+                    index={index}
+                    boardName={boardName}
+                    listName={listName}
+                    {...barInfo}
+                  />
                 ))}
                 {dropProvided.placeholder}
               </DropSpace>

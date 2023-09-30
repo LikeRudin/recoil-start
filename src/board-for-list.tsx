@@ -1,27 +1,14 @@
-import {
-  Droppable,
-  Draggable,
-  DragDropContext,
-  DropResult,
-} from "react-beautiful-dnd";
+import { Droppable, Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import ListForBar from "./list-for-bar";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { listState } from "./atoms";
 interface BoardForListProps {
   boardName: string;
   listNames: string[];
-  index: number;
+  boardIndex: number;
 }
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-`;
 const DragSpace = styled.div`
   width: 80%;
   height: 30%;
@@ -49,34 +36,13 @@ const DropSpace = styled.div<IDropSpace>`
 
 const Input = styled.input``;
 
-const BoardForList = ({ boardName, listNames, index }: BoardForListProps) => {
-  const [lists, setLists] = useRecoilState(listState);
-  const onDragEndInBoard = ({ source, destination }: DropResult) => {
-    console.log("in board dragging");
-    if (!destination) {
-      return;
-    }
-    const { droppableId: sourceId, index: sourceIndex } = source;
-    const { droppableId: destinationId, index: destinationIndex } = destination;
-    console.log(destinationId);
-    console.log(sourceId);
-    if (sourceId === "board" && destinationId === "board") {
-      setLists((lists) => {
-        const newLists = [...lists];
-        const [target] = newLists.splice(sourceIndex, 1);
-        newLists.splice(destinationIndex, 0, target);
-        return newLists;
-      });
-    }
-  };
-  const onListBeforeDragStart = () => {
-    console.log("start drag in board");
-  };
+const BoardForList = ({ boardName, boardIndex }: BoardForListProps) => {
+  const lists = useRecoilValue(listState);
 
   return (
     <Draggable
-      draggableId={`board-${boardName}-${index}`}
-      index={index}
+      draggableId={`board-${boardName}-${boardIndex}`}
+      index={boardIndex}
       key={`board-${boardName}`}
     >
       {(provided) => (
@@ -84,7 +50,7 @@ const BoardForList = ({ boardName, listNames, index }: BoardForListProps) => {
           <h1 {...provided.dragHandleProps}>{boardName}</h1>
 
           <Droppable
-            droppableId={`board-${boardName}`}
+            droppableId={`${boardName}-${boardIndex}`}
             direction="horizontal"
             type="column"
           >
@@ -100,9 +66,10 @@ const BoardForList = ({ boardName, listNames, index }: BoardForListProps) => {
                   return (
                     <ListForBar
                       listName={listName}
-                      index={index}
                       key={`list-${index}`}
                       bars={bars}
+                      boardIndex={boardIndex}
+                      listIndex={index}
                       boardName={boardName}
                     />
                   );

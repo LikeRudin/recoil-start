@@ -4,9 +4,10 @@ import { memo } from "react";
 
 interface BarProps {
   id: number;
-  index: number;
   text: string;
   boardName: string;
+  listName: string;
+  index: number;
 }
 
 interface IDragSpace {
@@ -26,9 +27,9 @@ const DragSpace = styled.div<IDragSpace>`
 const DeleteButton = styled.button``;
 
 const Input = styled.input``;
-const Bar = ({ id, index, text, boardName }: BarProps) => {
+const Bar = ({ id, index, text, boardName, listName }: BarProps) => {
   return (
-    <Draggable draggableId={`bar-${boardName}-${id}`} index={index}>
+    <Draggable draggableId={`bar-${boardName}-${listName}-${id}`} index={index}>
       {(provided, snapshot) => (
         <DragSpace
           {...provided.draggableProps}
