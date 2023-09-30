@@ -44,7 +44,20 @@ const DropSpace = styled.div<IDropSpace>`
   }
 `;
 
-const Input = styled.input``;
+const TitleWrapper = styled.div`
+  margin-top: 4.5%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+`;
+
+const Input = styled.input`
+  border: none;
+  font-size: xx-large;
+  width: 20%;
+  height: 20%;
+  margin-right: 5%;
+`;
 
 const BoardForList = ({ boardName, boardIndex }: BoardForListProps) => {
   const lists = useRecoilValue(
@@ -61,10 +74,10 @@ const BoardForList = ({ boardName, boardIndex }: BoardForListProps) => {
     >
       {(provided) => (
         <DragSpace ref={provided.innerRef} {...provided.draggableProps}>
-          <h1 {...provided.dragHandleProps}>{boardName}</h1>
-
-          <FormCreatingList boardIndex={boardIndex} />
-
+          <TitleWrapper {...provided.dragHandleProps}>
+            <Input value={boardName} />
+            <FormCreatingList boardIndex={boardIndex} />
+          </TitleWrapper>
           <Droppable
             droppableId={`board-${boardIndex}`}
             direction="horizontal"

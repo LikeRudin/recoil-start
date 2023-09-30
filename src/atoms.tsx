@@ -52,16 +52,16 @@ export const dataState = atom<IBoard[]>({
           name: "DOING",
           id: 1232135,
           bars: [
-            { id: 11, text: "잠자기" },
-            { id: 21, text: "게임하기" },
+            { id: 1122, text: "잠자기" },
+            { id: 21222, text: "게임하기" },
           ],
         },
         {
           name: "DONE",
           id: 12399224,
           bars: [
-            { id: 111, text: "샤워하기" },
-            { id: 211, text: "밥먹기" },
+            { id: 11133, text: "샤워하기" },
+            { id: 21144, text: "밥먹기" },
           ],
         },
       ],

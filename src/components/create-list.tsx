@@ -8,7 +8,11 @@ interface FormCreatingBoardProps {
 }
 
 const Form = styled.form``;
-const Input = styled.input``;
+const Input = styled.input`
+  font-size: large;
+  border: solid: 2px rgba(0,0,0, 0.4);
+
+`;
 
 const FormCreatingList = ({ boardIndex }: FormCreatingBoardProps) => {
   const setDatas = useSetRecoilState(dataState);

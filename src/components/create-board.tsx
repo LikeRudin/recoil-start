@@ -3,8 +3,16 @@ import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
 import { IBoard, dataState } from "../atoms";
 
-const Form = styled.form``;
-const Input = styled.input``;
+const Form = styled.form`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const Input = styled.input`
+  border: none;
+  font-size: xx-large;
+  text-align: center;
+`;
 
 const FormCreatingBoard = () => {
   const setData = useSetRecoilState(dataState);

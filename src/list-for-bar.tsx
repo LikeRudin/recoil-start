@@ -24,10 +24,8 @@ const DropSpace = styled.div<IDropSpace>`
   flex-direction: column;
   justify-content: flex-start;
   height: 100%;
-  width: 200px;
-  overflow-x: auto;
-
-  padding: 5px;
+  width: 220px;
+  padding: 10px;
   background-color: ${(props) =>
     props.isDraggingOver
       ? "pink"
@@ -35,13 +33,25 @@ const DropSpace = styled.div<IDropSpace>`
       ? "yellow"
       : "transparent"};
 `;
-const Input = styled.input``;
+
+const TitleWrapper = styled.div`
+  margin-top: 4.5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+`;
+
+const Input = styled.input`
+  width: 50%;
+  border: none;
+  font-size: X-large;
+`;
 
 const ListForBar = ({
   listName,
   listIndex,
   bars,
-  boardName,
   boardIndex,
 }: ListForBarProps) => {
   const [listTitle, setListTitle] = useState(listName);
@@ -53,13 +63,16 @@ const ListForBar = ({
   });
   return (
     <Draggable
-      draggableId={`list-${boardName}-${listName}-${listIndex}`}
+      draggableId={`list-${boardIndex}-${listIndex}-${listIndex}`}
       index={listIndex}
     >
       {(provided) => (
         <DragSpace {...provided.draggableProps} ref={provided.innerRef}>
-          <FormCreatingBar boardIndex={boardIndex} listIndex={listIndex} />
-          <h1 {...provided.dragHandleProps}>{listName}</h1>
+          <TitleWrapper {...provided.dragHandleProps}>
+            <Input value={listName} />
+            <FormCreatingBar boardIndex={boardIndex} listIndex={listIndex} />
+          </TitleWrapper>
+
           <Droppable
             droppableId={`list-${boardIndex}-${listIndex}`}
             direction="vertical"
@@ -75,8 +88,8 @@ const ListForBar = ({
                 {values.map((barInfo, index) => (
                   <Bar
                     index={index}
-                    boardName={boardName}
-                    listName={listName}
+                    boardIndex={boardIndex}
+                    listIndex={listIndex}
                     {...barInfo}
                   />
                 ))}
