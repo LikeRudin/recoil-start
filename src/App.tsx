@@ -1,6 +1,5 @@
 import { createGlobalStyle } from "styled-components";
-import { TodoList } from "./todolist";
-import { CreateTodo } from "./create-todo";
+
 import styled from "styled-components";
 import Boards from "./boards";
 const GlobalStyle = createGlobalStyle`
