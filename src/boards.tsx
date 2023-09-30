@@ -3,6 +3,7 @@ import BoardForList from "./board-for-list";
 import { dataState, boardsSelector } from "./atoms";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
+import FormCreatingBoard from "./components/create-board";
 
 const Wrapper = styled.div`
   display: flex;
@@ -12,14 +13,19 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100%;
 `;
-
-const DropSpace = styled.div`
+interface IDragSpace {
+  isDraggingOver: boolean;
+}
+const DropSpace = styled.div<IDragSpace>`
+  background-color: ${(props) =>
+    props.isDraggingOver ? "gray" : "transparent"};
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  width: 100%;
+  width: 70%;
   height: 100%;
+  border-radius: 30px;
 `;
 
 const Input = styled.input``;
@@ -106,11 +112,15 @@ const Boards = () => {
   };
   return (
     <Wrapper>
-      <Input value="Create Boards" />
+      <FormCreatingBoard />
       <DragDropContext onDragEnd={onBoardDragEnd}>
-        <Droppable droppableId="main">
-          {(provided) => (
-            <DropSpace ref={provided.innerRef} {...provided.droppableProps}>
+        <Droppable droppableId="main" type="board" direction="vertical">
+          {(provided, snapshot) => (
+            <DropSpace
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              isDraggingOver={snapshot.isDraggingOver}
+            >
               {boards.map((name, index) => {
                 return (
                   <BoardForList

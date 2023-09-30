@@ -3,14 +3,19 @@ import styled from "styled-components";
 import ListForBar from "./list-for-bar";
 import { useRecoilValue } from "recoil";
 import { listsSelector } from "./atoms";
+import { memo } from "react";
 interface BoardForListProps {
   boardName: string;
   boardIndex: number;
 }
 
 const DragSpace = styled.div`
-  width: 80%;
+  width: 95%;
   height: 30%;
+  overflow-x: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 interface IDropSpace {
@@ -20,17 +25,22 @@ interface IDropSpace {
 const DropSpace = styled.div<IDropSpace>`
   display: flex;
   justify-content: flex-start;
-  overflow: hidden;
-  width: 100%;
+  overflow-x: auto;
+
+  width: 90%;
   height: 100%;
   padding: 20px;
+  border-radius: 30px;
   background-color: ${(props) =>
     props.isDraggingOver
       ? "gray"
       : props.draggingFromThis
       ? "red"
-      : "transparent"};
+      : "rgba(255,255,255, 0.6)"};
   transition: background-color 0.2s ease-in-out;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Input = styled.input``;
@@ -89,4 +99,4 @@ const BoardForList = ({ boardName, boardIndex }: BoardForListProps) => {
     </Draggable>
   );
 };
-export default BoardForList;
+export default memo(BoardForList);

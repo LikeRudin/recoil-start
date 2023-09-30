@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import Bar from "./bar";
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 interface ListForBarProps {
   listName: string;
   bars: any[];
@@ -22,8 +22,10 @@ const DropSpace = styled.div<IDropSpace>`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  width: 80%;
-  height: auto;
+  height: 100%;
+  width: 200px;
+  overflow-x: auto;
+
   padding: 5px;
   background-color: ${(props) =>
     props.isDraggingOver
@@ -87,4 +89,4 @@ const ListForBar = ({
   );
 };
 
-export default ListForBar;
+export default memo(ListForBar);

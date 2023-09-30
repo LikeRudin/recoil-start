@@ -39,7 +39,6 @@ export const App = () => {
     <>
       <GlobalStyle />
       <Wrapper>
-        <h1>Title</h1>
         <Boards />
       </Wrapper>
     </>
