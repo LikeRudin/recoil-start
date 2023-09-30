@@ -1,51 +1,55 @@
 import styled from "styled-components";
-import {
-  Droppable,
-  Draggable,
-  DragDropContext,
-  DropResult,
-} from "react-beautiful-dnd";
+import { Droppable, Draggable } from "react-beautiful-dnd";
 import Bar from "./bar";
 interface ListForBarProps {
-  id: string;
+  listName: string;
+  bars: any[];
   index: number;
 }
-import { useRecoilValue } from "recoil";
-import { valuesState } from "./atoms";
+
 const DragSpace = styled.div``;
-const DropSpace = styled.div`
-  background-color: blue;
+interface IDropSpace {
+  isDraggingOver: boolean;
+  draggingOverFromThis: boolean;
+}
+const DropSpace = styled.div<IDropSpace>`
+  flex-grow: 1;
+  background-color: ${(props) =>
+    props.isDraggingOver
+      ? "pink"
+      : props.draggingOverFromThis
+      ? "yellow"
+      : "transparent"};
+  transition: background-color 0.2s ease-in-out;
+  padding: 20px;
 `;
 const Input = styled.input``;
 
-const ListForBar = ({ id, index }: ListForBarProps) => {
-  const values = useRecoilValue(valuesState)[id];
-  const onDragEnd = ({ source, destination }: DropResult) => {
-    console.log(source);
-    console.log(destination);
-  };
+const ListForBar = ({ listName, index, bars }: ListForBarProps) => {
+  const values = bars;
+
   return (
-    <Draggable draggableId={`list-${id}`} index={index}>
+    <Draggable draggableId={`list-${listName}`} index={index}>
       {(provided) => (
         <DragSpace {...provided.draggableProps} ref={provided.innerRef}>
           <Input value="create Bar" />
-          <h1 {...provided.dragHandleProps}>{id}</h1>
-          <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId={"List " + id}>
-              {(secondProvided) => (
-                <DropSpace
-                  {...secondProvided.droppableProps}
-                  ref={secondProvided.innerRef}
-                  key={id}
-                >
-                  {values.map((barProps, index) => (
-                    <Bar {...barProps} index={index} key={`bar-${index}`} />
-                  ))}
-                  {secondProvided.placeholder}
-                </DropSpace>
-              )}
-            </Droppable>
-          </DragDropContext>
+          <h1 {...provided.dragHandleProps}>{listName}</h1>
+          <Droppable droppableId={`list-${listName}`}>
+            {(dropProvided, dropSnapshot) => (
+              <DropSpace
+                {...dropProvided.droppableProps}
+                ref={dropProvided.innerRef}
+                key={`bar-${index}`}
+                isDraggingOver={dropSnapshot.isDraggingOver}
+                draggingOverFromThis={!!dropSnapshot.draggingFromThisWith}
+              >
+                {values.map((barInfo, index) => (
+                  <Bar {...barInfo} index={index} />
+                ))}
+                {dropProvided.placeholder}
+              </DropSpace>
+            )}
+          </Droppable>
         </DragSpace>
       )}
     </Draggable>
