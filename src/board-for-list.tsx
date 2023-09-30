@@ -2,10 +2,9 @@ import { Droppable, Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import ListForBar from "./list-for-bar";
 import { useRecoilValue } from "recoil";
-import { listState } from "./atoms";
+import { listsSelector } from "./atoms";
 interface BoardForListProps {
   boardName: string;
-  listNames: string[];
   boardIndex: number;
 }
 
@@ -37,7 +36,12 @@ const DropSpace = styled.div<IDropSpace>`
 const Input = styled.input``;
 
 const BoardForList = ({ boardName, boardIndex }: BoardForListProps) => {
-  const lists = useRecoilValue(listState);
+  const lists = useRecoilValue(
+    listsSelector({
+      boardIndex,
+      boardName,
+    })
+  );
 
   return (
     <Draggable

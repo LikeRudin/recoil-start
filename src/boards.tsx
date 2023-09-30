@@ -1,7 +1,7 @@
 import { DragDropContext, DropResult, Droppable } from "react-beautiful-dnd";
 import BoardForList from "./board-for-list";
-import { boardState, dataState } from "./atoms";
-import { useRecoilState } from "recoil";
+import { dataState, boardsSelector } from "./atoms";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -25,8 +25,9 @@ const DropSpace = styled.div`
 const Input = styled.input``;
 
 const Boards = () => {
-  const [boards, setBoards] = useRecoilState(boardState);
-  const [datas, setDatas] = useRecoilState(dataState);
+  const boards = useRecoilValue(boardsSelector);
+
+  const setDatas = useSetRecoilState(dataState);
 
   const onBoardDragEnd = ({ source, destination }: DropResult) => {
     if (!destination) {
@@ -110,12 +111,10 @@ const Boards = () => {
         <Droppable droppableId="main">
           {(provided) => (
             <DropSpace ref={provided.innerRef} {...provided.droppableProps}>
-              {[...Object.entries(boards)].map((boardProps, index) => {
-                const [boardName, listNames] = boardProps;
+              {boards.map((name, index) => {
                 return (
                   <BoardForList
-                    boardName={boardName}
-                    listNames={listNames}
+                    boardName={name}
                     boardIndex={index}
                     key={`board-${index}`}
                   />
