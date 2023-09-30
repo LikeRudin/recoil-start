@@ -1,42 +1,36 @@
 import { atom } from "recoil";
 
-export interface IBar {
-  id: string;
+interface IBar {
   text: string;
+  id: number;
+}
+interface IListState {
+  [key: string]: IBar[];
 }
 
-export const boardsState = atom<string[]>({
-  key: "boards",
-  default: ["yesterday", "tomorrow"],
-});
-
-export const listsState = atom<{ [key: string]: string[] }>({
+export const listState = atom<IListState>({
   key: "lists",
-  default: { yesterday: ["TODO", "DONE"], tomorrow: ["TODO", "DONE"] },
-});
-
-export const valuesState = atom<{ [key: string]: IBar[] }>({
-  key: "values",
   default: {
-    TODO: [
-      {
-        id: "1",
-        text: "hello",
-      },
-      {
-        id: "2",
-        text: "zitto",
-      },
-      {
-        id: "3",
-        text: "hello",
-      },
+    TODO: [{ id: 1, text: "코딩" }],
+    DOING: [
+      { id: 1, text: "잠자기" },
+      { id: 2, text: "게임하기" },
     ],
     DONE: [
-      {
-        id: "2",
-        text: "wake up",
-      },
+      { id: 1, text: "샤워하기" },
+      { id: 2, text: "밥먹기" },
     ],
+  },
+});
+
+interface IBoardState {
+  [key: string]: string[];
+}
+
+export const boardState = atom<IBoardState>({
+  key: "boards",
+  default: {
+    오늘: ["TODO", "DOING", "DONE"],
+    내일: ["TODO", "DOING", "DONE"],
   },
 });
