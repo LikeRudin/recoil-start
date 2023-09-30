@@ -6,7 +6,7 @@ import {
 } from "react-beautiful-dnd";
 import styled from "styled-components";
 import ListForBar from "./list-for-bar";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { listState } from "./atoms";
 interface BoardForListProps {
   boardName: string;
@@ -14,6 +14,14 @@ interface BoardForListProps {
   index: number;
 }
 
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
 const DragSpace = styled.div`
   width: 80%;
   height: 30%;
@@ -42,54 +50,68 @@ const DropSpace = styled.div<IDropSpace>`
 const Input = styled.input``;
 
 const BoardForList = ({ boardName, listNames, index }: BoardForListProps) => {
-  const lists = useRecoilValue(listState);
+  const [lists, setLists] = useRecoilState(listState);
   const onDragEndInBoard = ({ source, destination }: DropResult) => {
-    console.log(source);
-    console.log(destination);
+    console.log("in board dragging");
+    if (!destination) {
+      return;
+    }
+    const { droppableId: sourceId, index: sourceIndex } = source;
+    const { droppableId: destinationId, index: destinationIndex } = destination;
+    console.log(destinationId);
+    console.log(sourceId);
+    if (sourceId === "board" && destinationId === "board") {
+      setLists((lists) => {
+        const newLists = [...lists];
+        const [target] = newLists.splice(sourceIndex, 1);
+        newLists.splice(destinationIndex, 0, target);
+        return newLists;
+      });
+    }
   };
   const onListBeforeDragStart = () => {
-    console.log(`starting..drag`);
+    console.log("start drag in board");
   };
 
   return (
     <Draggable
-      draggableId={`board-${index}`}
+      draggableId={`board-${boardName}-${index}`}
       index={index}
       key={`board-${boardName}`}
     >
       {(provided) => (
         <DragSpace ref={provided.innerRef} {...provided.draggableProps}>
           <h1 {...provided.dragHandleProps}>{boardName}</h1>
-          <DragDropContext
-            onDragEnd={onDragEndInBoard}
-            onBeforeDragStart={onListBeforeDragStart}
+
+          <Droppable
+            droppableId={`board-${boardName}`}
+            direction="horizontal"
+            type="column"
           >
-            <Droppable
-              droppableId={`board-${boardName}`}
-              direction="horizontal"
-              type="column"
-            >
-              {(dropProvided, dropSnapshot) => (
-                <DropSpace
-                  {...dropProvided.droppableProps}
-                  ref={dropProvided.innerRef}
-                  isDraggingOver={dropSnapshot.isDraggingOver}
-                  draggingFromThis={!!dropSnapshot.draggingFromThisWith}
-                >
-                  {listNames.map((listName, index) => (
+            {(dropProvided, dropSnapshot) => (
+              <DropSpace
+                {...dropProvided.droppableProps}
+                ref={dropProvided.innerRef}
+                isDraggingOver={dropSnapshot.isDraggingOver}
+                draggingFromThis={!!dropSnapshot.draggingFromThisWith}
+              >
+                {lists.map((list, index) => {
+                  const [[listName, bars]] = Object.entries(list);
+                  return (
                     <ListForBar
                       listName={listName}
                       index={index}
                       key={`list-${index}`}
-                      bars={lists[listName]}
+                      bars={bars}
+                      boardName={boardName}
                     />
-                  ))}
+                  );
+                })}
+                {dropProvided.placeholder}
+              </DropSpace>
+            )}
+          </Droppable>
 
-                  {dropProvided.placeholder}
-                </DropSpace>
-              )}
-            </Droppable>
-          </DragDropContext>
           <Input value="Create Lists" />
         </DragSpace>
       )}

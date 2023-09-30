@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
+import { memo } from "react";
 
 interface BarProps {
-  id: string;
+  id: number;
   index: number;
   text: string;
+  boardName: string;
 }
 
 interface IDragSpace {
@@ -24,9 +26,9 @@ const DragSpace = styled.div<IDragSpace>`
 const DeleteButton = styled.button``;
 
 const Input = styled.input``;
-const Bar = ({ id, index, text }: BarProps) => {
+const Bar = ({ id, index, text, boardName }: BarProps) => {
   return (
-    <Draggable draggableId={`bar-${id}`} index={index}>
+    <Draggable draggableId={`bar-${boardName}-${id}`} index={index}>
       {(provided, snapshot) => (
         <DragSpace
           {...provided.draggableProps}
@@ -42,4 +44,4 @@ const Bar = ({ id, index, text }: BarProps) => {
   );
 };
 
-export default Bar;
+export default memo(Bar);

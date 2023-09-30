@@ -8,19 +8,23 @@ interface IListState {
   [key: string]: IBar[];
 }
 
-export const listState = atom<IListState>({
+export const listState = atom<IListState[]>({
   key: "lists",
-  default: {
-    TODO: [{ id: 1, text: "코딩" }],
-    DOING: [
-      { id: 1, text: "잠자기" },
-      { id: 2, text: "게임하기" },
-    ],
-    DONE: [
-      { id: 1, text: "샤워하기" },
-      { id: 2, text: "밥먹기" },
-    ],
-  },
+  default: [
+    { TODO: [{ id: 1, text: "코딩" }] },
+    {
+      DOING: [
+        { id: 11, text: "잠자기" },
+        { id: 21, text: "게임하기" },
+      ],
+    },
+    {
+      DONE: [
+        { id: 111, text: "샤워하기" },
+        { id: 211, text: "밥먹기" },
+      ],
+    },
+  ],
 });
 
 interface IBoardState {
