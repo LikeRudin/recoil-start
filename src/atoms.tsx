@@ -1,45 +1,19 @@
-import { atom } from "recoil";
+import { atom, selector, selectorFamily } from "recoil";
 
-interface IBar {
-  text: string;
+export interface IBar {
   id: number;
+  text: string;
 }
-interface IListState {
+
+export interface ILists {
   [key: string]: IBar[];
 }
 
-export const listState = atom<IListState[]>({
-  key: "lists",
-  default: [
-    { TODO: [{ id: 1, text: "코딩" }] },
-    {
-      DOING: [
-        { id: 11, text: "잠자기" },
-        { id: 21, text: "게임하기" },
-      ],
-    },
-    {
-      DONE: [
-        { id: 111, text: "샤워하기" },
-        { id: 211, text: "밥먹기" },
-      ],
-    },
-  ],
-});
-
-interface IBoardState {
-  [key: string]: string[];
+export interface IBoard {
+  [key: string]: ILists[];
 }
 
-export const boardState = atom<IBoardState>({
-  key: "boards",
-  default: {
-    오늘: ["TODO", "DOING", "DONE"],
-    내일: ["TODO", "DOING", "DONE"],
-  },
-});
-
-export const dataState = atom({
+export const dataState = atom<IBoard[]>({
   key: "datas",
   default: [
     {
@@ -77,4 +51,25 @@ export const dataState = atom({
       ],
     },
   ],
+});
+
+export const boardsSelector = selector({
+  key: "boards",
+  get: ({ get }) => {
+    const data = get(dataState);
+    return data.map((board) => Object.keys(board)[0]);
+  },
+});
+
+export const listsSelector = selectorFamily<
+  ILists[],
+  { boardIndex: number; boardName: string }
+>({
+  key: "lists",
+  get:
+    ({ boardIndex, boardName }) =>
+    ({ get }) => {
+      const data = get(dataState);
+      return data[boardIndex][boardName];
+    },
 });
