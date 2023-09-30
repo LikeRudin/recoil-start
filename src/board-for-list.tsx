@@ -4,6 +4,7 @@ import ListForBar from "./list-for-bar";
 import { useRecoilValue } from "recoil";
 import { listsSelector } from "./atoms";
 import { memo } from "react";
+import FormCreatingList from "./components/create-list";
 interface BoardForListProps {
   boardName: string;
   boardIndex: number;
@@ -62,6 +63,8 @@ const BoardForList = ({ boardName, boardIndex }: BoardForListProps) => {
         <DragSpace ref={provided.innerRef} {...provided.draggableProps}>
           <h1 {...provided.dragHandleProps}>{boardName}</h1>
 
+          <FormCreatingList boardIndex={boardIndex} />
+
           <Droppable
             droppableId={`${boardName}-${boardIndex}`}
             direction="horizontal"
@@ -91,8 +94,6 @@ const BoardForList = ({ boardName, boardIndex }: BoardForListProps) => {
               </DropSpace>
             )}
           </Droppable>
-
-          <Input value="Create Lists" />
         </DragSpace>
       )}
     </Draggable>

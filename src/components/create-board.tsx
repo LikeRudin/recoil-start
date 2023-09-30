@@ -1,10 +1,8 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
-import { dataState } from "../atoms";
-interface IonValidArg {
-  boardName: string;
-}
+import { IBoard, dataState } from "../atoms";
+
 const Form = styled.form``;
 const Input = styled.input``;
 
@@ -12,21 +10,18 @@ const FormCreatingBoard = () => {
   const setData = useSetRecoilState(dataState);
   const { register, handleSubmit, setValue } = useForm();
 
-  const onValid = ({ boardName }: IonValidArg) => {
+  const onValid = ({ name }: IBoard) => {
     setData((oldData) => {
-      const newData = [
-        { name: boardName, id: Date.now(), lists: [] },
-        ...oldData,
-      ];
+      const newData = [{ name: name, id: Date.now(), lists: [] }, ...oldData];
       return newData;
     });
-    setValue("boardName", "");
+    setValue("name", "");
   };
 
   return (
     <Form onSubmit={handleSubmit(onValid)}>
       <Input
-        {...register("boardName", { required: true })}
+        {...register("name", { required: true })}
         type="text"
         placeholder="Create new Board"
       />
