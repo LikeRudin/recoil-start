@@ -7,19 +7,35 @@ interface BarProps {
   text: string;
 }
 
-const DragSpace = styled.div``;
+interface IDragSpace {
+  isDragging: boolean;
+}
+
+const DragSpace = styled.div<IDragSpace>`
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 8px;
+  background-color: ${(props) => (props.isDragging ? "tomato" : "blue")};
+  user-select: none;
+  box-shadow: ${(props) =>
+    props.isDragging ? "0px 2px 5px rgba(0, 0, 0, 0.05)" : "none"};
+  font-weight: 500;
+`;
+const DeleteButton = styled.button``;
 
 const Input = styled.input``;
 const Bar = ({ id, index, text }: BarProps) => {
   return (
-    <Draggable draggableId={id} index={index}>
-      {(provided) => (
+    <Draggable draggableId={`bar-${id}`} index={index}>
+      {(provided, snapshot) => (
         <DragSpace
-          ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
+          ref={provided.innerRef}
+          isDragging={snapshot.isDragging}
         >
           <Input value={text} />
+          <DeleteButton>🗑</DeleteButton>
         </DragSpace>
       )}
     </Draggable>
