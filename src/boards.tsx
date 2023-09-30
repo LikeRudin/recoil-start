@@ -1,6 +1,6 @@
 import { DragDropContext, DropResult, Droppable } from "react-beautiful-dnd";
 import BoardForList from "./board-for-list";
-import { boardsState } from "./atoms";
+import { boardState } from "./atoms";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
@@ -29,45 +29,31 @@ const DropSpace = styled.div`
 const Input = styled.input``;
 
 const Boards = () => {
-  const [boards, setBoards] = useRecoilState(boardsState);
-  const onDragEnd = ({ source, destination }: DropResult) => {
+  const [boards, setBoards] = useRecoilState(boardState);
+  const onBoardDragEnd = ({ source, destination }: DropResult) => {
     if (!destination) {
       return;
     }
-    const [sourceId, destinationId] = [
-      source["droppableId"],
-      destination["droppableId"],
-    ];
-    const [sourceIndex, destinationIndex] = [
-      source["index"],
-      destination["index"],
-    ];
-
-    if (sourceId === "main" && destinationId === "main") {
-      setBoards((boards) => {
-        const newBoards = [...boards];
-        const [target] = newBoards.splice(sourceIndex, 1);
-        newBoards.splice(destinationIndex, 0, target);
-        return newBoards;
-      });
-    } else if (source) console.log("source");
-    console.log(source);
-    console.log("destination");
-    console.log(destination);
-    //is different Board
-    //is Same Board
-    //is Same list
+    setBoards((boards) => boards);
   };
   return (
     <Wrapper>
       <Input value="Create Boards" />
-      <DragDropContext onDragEnd={onDragEnd}>
+      <DragDropContext onDragEnd={onBoardDragEnd}>
         <Droppable droppableId="main">
           {(provided) => (
-            <DropSpace {...provided.droppableProps} ref={provided.innerRef}>
-              {boards.map((item, index) => (
-                <BoardForList id={item} index={index} key={`board-${index}`} />
-              ))}
+            <DropSpace ref={provided.innerRef} {...provided.droppableProps}>
+              {[...Object.entries(boards)].map((boardProps, index) => {
+                const [boardName, listNames] = boardProps;
+                return (
+                  <BoardForList
+                    boardName={boardName}
+                    listNames={listNames}
+                    index={index}
+                    key={`board-${index}`}
+                  />
+                );
+              })}
               {provided.placeholder}
             </DropSpace>
           )}
