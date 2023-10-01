@@ -1,12 +1,11 @@
 import styled from "styled-components";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import Bar from "./bar";
-import { memo, useEffect, useState } from "react";
+import React, { memo } from "react";
 import FormCreatingBar from "./components/create-bar";
-import { IBar, barsSelector } from "./atoms";
-import { useRecoilValue } from "recoil";
+import { IBar, ListNameSelector } from "./atoms";
+import { useRecoilState } from "recoil";
 interface ListForBarProps {
-  listName: string;
   bars: any[];
   listIndex: number;
   boardIndex: number;
@@ -50,13 +49,14 @@ const Input = styled.input`
   font-size: X-large;
 `;
 
-const ListForBar = ({
-  listName,
-  listIndex,
-  bars,
-  boardIndex,
-}: ListForBarProps) => {
+const ListForBar = ({ listIndex, bars, boardIndex }: ListForBarProps) => {
   const values = bars;
+  const [listName, setListName] = useRecoilState(
+    ListNameSelector({ boardIndex, listIndex })
+  );
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setListName(event.currentTarget.value);
+  };
   return (
     <Draggable
       draggableId={`list-${boardIndex}-${listIndex}-${listIndex}`}
@@ -65,7 +65,7 @@ const ListForBar = ({
       {(provided) => (
         <DragSpace {...provided.draggableProps} ref={provided.innerRef}>
           <TitleWrapper {...provided.dragHandleProps}>
-            <Input value={listName} />
+            <Input value={listName} onChange={onChange} />
             <FormCreatingBar boardIndex={boardIndex} listIndex={listIndex} />
           </TitleWrapper>
 

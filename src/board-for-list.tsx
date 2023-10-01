@@ -91,10 +91,9 @@ const BoardForList = ({ boardName, boardIndex }: BoardForListProps) => {
                 draggingFromThis={!!dropSnapshot.draggingFromThisWith}
               >
                 {lists.map((list, index) => {
-                  const { name, bars } = list;
+                  const { bars } = list;
                   return (
                     <ListForBar
-                      listName={name}
                       key={`list-${index}`}
                       bars={bars}
                       boardIndex={boardIndex}
