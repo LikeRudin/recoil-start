@@ -24,8 +24,9 @@ const DropSpace = styled.div<IDropSpace>`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-items: center;
   height: 100%;
-  width: 220px;
+  width: 240px;
   padding: 10px;
   background-color: ${(props) =>
     props.isDraggingOver

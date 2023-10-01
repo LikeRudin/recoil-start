@@ -8,11 +8,13 @@ interface FormCreatingBoardProps {
   boardIndex: number;
 }
 
-const Form = styled.form``;
+const Form = styled.form`
+  margin-right: 100px;
+`;
 const Input = styled.input`
   font-size: large;
   border: solid: 2px rgba(0,0,0, 0.4);
-
+  height: 35px;
 `;
 
 interface FormValue {

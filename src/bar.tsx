@@ -25,6 +25,7 @@ const DragSpace = styled.div<IDragSpace>`
   height: 100%;
   border-radius: 5px;
   padding: 10px;
+  padding-right: 25px;
   margin-bottom: 8px;
   background-color: ${(props) =>
     props.isDragging ? "tomato" : "rgba(0, 0, 0, 0.7)"};
@@ -78,10 +79,10 @@ const Bar = ({ id, boardIndex, listIndex, barIndex }: BarProps) => {
           ref={provided.innerRef}
           isDragging={snapshot.isDragging}
         >
-          <Input value={barText} onChange={onChange} />
           <Button value={barIndex} onClick={onDeleteClick}>
             🗑
           </Button>
+          <Input value={barText} onChange={onChange} />
         </DragSpace>
       )}
     </Draggable>

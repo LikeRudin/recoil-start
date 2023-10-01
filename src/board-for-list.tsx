@@ -69,7 +69,7 @@ const TitleWrapper = styled.div`
 const Input = styled.input`
   border: none;
   font-size: xx-large;
-  width: 20%;
+  width: 200px;
   height: 20%;
   margin-right: 5%;
 `;
@@ -84,8 +84,8 @@ const Button = styled.button`
   margin: 0px 30px;
 `;
 const Span = styled.span`
+  width: 250px;
   font-size: xxx-large;
-  margin: 0px 100px;
 `;
 
 const BoardForList = ({ boardIndex }: BoardForListProps) => {
