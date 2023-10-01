@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import Bar from "./bar";
-import { useEffect, useState, memo } from "react";
+import { memo, useEffect, useState } from "react";
 import FormCreatingBar from "./components/create-bar";
+import { IBar, barsSelector } from "./atoms";
+import { useRecoilValue } from "recoil";
 interface ListForBarProps {
   listName: string;
   bars: any[];
@@ -79,9 +81,9 @@ const ListForBar = ({
                 draggingOverFromThis={!!dropSnapshot.draggingFromThisWith}
                 ref={dropProvided.innerRef}
               >
-                {values.map((barInfo, index) => (
+                {values.map((barInfo: IBar, index) => (
                   <Bar
-                    index={index}
+                    barIndex={index}
                     boardIndex={boardIndex}
                     listIndex={listIndex}
                     {...barInfo}

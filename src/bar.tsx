@@ -1,13 +1,14 @@
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
-import { memo } from "react";
+import React, { memo, useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { barTextSelector } from "./atoms";
 
 interface BarProps {
   id: number;
-  text: string;
   boardIndex: number;
   listIndex: number;
-  index: number;
+  barIndex: number;
 }
 
 interface IDragSpace {
@@ -41,11 +42,24 @@ const Input = styled.input`
   font-size: x-large;
   border: none;
 `;
-const Bar = ({ id, index, text, boardIndex, listIndex }: BarProps) => {
+const Bar = ({
+  id,
+
+  boardIndex,
+  listIndex,
+  barIndex,
+}: BarProps) => {
+  const [barText, setBarText] = useRecoilState(
+    barTextSelector({ boardIndex, listIndex, barIndex })
+  );
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setBarText(event.currentTarget.value);
+  };
+
   return (
     <Draggable
       draggableId={`bar-${boardIndex}-${listIndex}-${id}`}
-      index={index}
+      index={barIndex}
     >
       {(provided, snapshot) => (
         <DragSpace
@@ -54,7 +68,7 @@ const Bar = ({ id, index, text, boardIndex, listIndex }: BarProps) => {
           ref={provided.innerRef}
           isDragging={snapshot.isDragging}
         >
-          <Input value={text} />
+          <Input value={barText} onChange={onChange} />
         </DragSpace>
       )}
     </Draggable>

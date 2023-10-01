@@ -28,8 +28,6 @@ const DropSpace = styled.div<IDragSpace>`
   border-radius: 30px;
 `;
 
-const Input = styled.input``;
-
 const Boards = () => {
   const boards = useRecoilValue(boardsSelector);
 
