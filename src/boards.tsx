@@ -129,7 +129,9 @@ const Boards = () => {
               isDraggingOver={snapshot.isDraggingOver}
             >
               {boards.map((_, index) => {
-                return <BoardForList boardIndex={index} />;
+                return (
+                  <BoardForList boardIndex={index} key={`board-${index}`} />
+                );
               })}
               {provided.placeholder}
             </DropSpace>

@@ -119,6 +119,7 @@ const ListForBar = ({ listIndex, bars, boardIndex }: ListForBarProps) => {
                     boardIndex={boardIndex}
                     listIndex={listIndex}
                     {...barInfo}
+                    key={`bar-${index}`}
                   />
                 ))}
                 {dropProvided.placeholder}

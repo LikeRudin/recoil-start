@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
 
-import { IBoard, dataState, saveDatas } from "../atoms";
+import { dataState, saveDatas } from "../atoms";
 
 const Form = styled.form`
   display: flex;
@@ -14,12 +14,15 @@ const Input = styled.input`
   font-size: xx-large;
   text-align: center;
 `;
+interface FormValue {
+  name: string;
+}
 
 const FormCreatingBoard = () => {
   const setData = useSetRecoilState(dataState);
-  const { register, handleSubmit, setValue } = useForm();
+  const { register, handleSubmit, setValue } = useForm<FormValue>();
 
-  const onValid = ({ name }: IBoard) => {
+  const onValid = ({ name }: FormValue) => {
     setData((oldData) => {
       const newData = [{ name: name, id: Date.now(), lists: [] }, ...oldData];
       saveDatas(newData);
@@ -29,7 +32,6 @@ const FormCreatingBoard = () => {
   };
 
   return (
-    //@ts-ignore
     <Form onSubmit={handleSubmit(onValid)}>
       <Input
         {...register("name", { required: true })}

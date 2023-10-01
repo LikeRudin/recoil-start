@@ -69,7 +69,7 @@ export const dataState = atom<IBoard[]>({
   ],
 });
 
-export const boardsSelector = selector({
+export const boardsSelector = selector<IBoard[]>({
   key: "boards",
   get: ({ get }) => {
     const data = get(dataState);
