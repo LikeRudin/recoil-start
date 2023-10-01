@@ -28,6 +28,7 @@ const FormCreatingBar = ({ boardIndex, listIndex }: FormCreatingBarProps) => {
   };
 
   return (
+    //@ts-ignore
     <Form onSubmit={handleSubmit(onValid)}>
       <Input
         {...register("text", { required: "please type bar", minLength: 1 })}

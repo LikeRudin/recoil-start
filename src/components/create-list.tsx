@@ -27,6 +27,7 @@ const FormCreatingList = ({ boardIndex }: FormCreatingBoardProps) => {
     setValue("name", "");
   };
   return (
+    //@ts-ignore
     <Form onSubmit={handleSubmit(onValid)}>
       <Input
         {...register("name", { required: true, minLength: 1 })}

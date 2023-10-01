@@ -29,6 +29,7 @@ const FormCreatingBoard = () => {
   };
 
   return (
+    //@ts-ignore
     <Form onSubmit={handleSubmit(onValid)}>
       <Input
         {...register("name", { required: true })}
