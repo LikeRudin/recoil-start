@@ -13,7 +13,7 @@ interface ListForBarProps {
 }
 
 const DragSpace = styled.div`
-  width: 100%;
+  width: 280px;
   height: 100%;
 `;
 interface IDropSpace {
@@ -42,7 +42,9 @@ const HandleBox = styled.div`
   align-items: center;
 `;
 
-const Span = styled.span``;
+const Span = styled.span`
+  margin-left: 25px;
+`;
 
 const TitleWrapper = styled.div`
   margin-top: 4.5%;

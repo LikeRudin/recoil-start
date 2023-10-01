@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
 import React, { memo } from "react";
-import { useRecoilState } from "recoil";
-import { barTextSelector } from "./atoms";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { barTextSelector, barsSelector } from "./atoms";
 
 interface BarProps {
   id: number;
@@ -42,18 +42,26 @@ const Input = styled.input`
   font-size: x-large;
   border: none;
 `;
-const Bar = ({
-  id,
+const Button = styled.button`
+  font-size: large;
+  border-radius: 3px;
+  &:hover {
+    background-color: white;
+  }
+`;
 
-  boardIndex,
-  listIndex,
-  barIndex,
-}: BarProps) => {
+const Bar = ({ id, boardIndex, listIndex, barIndex }: BarProps) => {
   const [barText, setBarText] = useRecoilState(
     barTextSelector({ boardIndex, listIndex, barIndex })
   );
+  const deleteBars = useSetRecoilState(barsSelector({ boardIndex, listIndex }));
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setBarText(event.currentTarget.value);
+  };
+
+  const onDeleteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const targetIndex = Number(event.currentTarget.value);
+    deleteBars(targetIndex);
   };
 
   return (
@@ -69,6 +77,9 @@ const Bar = ({
           isDragging={snapshot.isDragging}
         >
           <Input value={barText} onChange={onChange} />
+          <Button value={barIndex} onClick={onDeleteClick}>
+            🗑
+          </Button>
         </DragSpace>
       )}
     </Draggable>

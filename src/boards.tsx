@@ -34,6 +34,7 @@ const Boards = () => {
   const setDatas = useSetRecoilState(dataState);
 
   const onBoardDragEnd = ({ source, destination }: DropResult) => {
+    console.log(destination);
     if (!destination) {
       return;
     }
@@ -41,11 +42,10 @@ const Boards = () => {
     const { droppableId: destinationId, index: destinationIndex } = destination;
     const distAddress = destinationId.split("-");
     const srcAddress = sourceId.split("-");
-
     console.log(distAddress);
     console.log(srcAddress);
 
-    if (distAddress.length === 1) {
+    if (srcAddress.length === 1) {
       setDatas((oldDatas) => {
         const newDatas = [...oldDatas];
         const [target] = newDatas.splice(sourceIndex, 1);
@@ -55,7 +55,7 @@ const Boards = () => {
       });
       return;
     }
-    if (distAddress.length === 2) {
+    if (srcAddress.length === 2) {
       const distBoardIndex = distAddress[1];
       const srcBoardIndex = srcAddress[1];
       console.log("리스트 이동");
@@ -71,7 +71,7 @@ const Boards = () => {
       });
       return;
     }
-    if (distAddress.length === 3) {
+    if (srcAddress.length === 3) {
       const [distBoardIndex, distListIndex] = distAddress.slice(1);
       const [srcBoardIndex, srcListIndex] = srcAddress.slice(1);
       setDatas((oldDatas) => {

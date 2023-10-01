@@ -131,7 +131,7 @@ export const ListNameSelector = selectorFamily<
 });
 
 export const barsSelector = selectorFamily<
-  ILists["bars"],
+  ILists["bars"] | number,
   { boardIndex: number; listIndex: number }
 >({
   key: "list",
@@ -140,6 +140,15 @@ export const barsSelector = selectorFamily<
     ({ get }) => {
       const data = get(dataState);
       return data[boardIndex].lists[listIndex].bars;
+    },
+  set:
+    ({ boardIndex, listIndex }) =>
+    ({ set }, targetIndex) => {
+      set(dataState, (data) => {
+        const newData = JSON.parse(JSON.stringify(data));
+        newData[boardIndex].lists[listIndex].bars.splice(targetIndex, 1);
+        return newData;
+      });
     },
 });
 
