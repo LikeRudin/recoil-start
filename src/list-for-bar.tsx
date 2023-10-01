@@ -3,8 +3,8 @@ import { Droppable, Draggable } from "react-beautiful-dnd";
 import Bar from "./bar";
 import React, { memo } from "react";
 import FormCreatingBar from "./components/create-bar";
-import { IBar, ListNameSelector } from "./atoms";
-import { useRecoilState } from "recoil";
+import { IBar, ListNameSelector, listsSelector } from "./atoms";
+import { useRecoilState, useSetRecoilState } from "recoil";
 interface ListForBarProps {
   bars: any[];
   listIndex: number;
@@ -61,13 +61,27 @@ const Input = styled.input`
   font-size: X-large;
 `;
 
+const Button = styled.button`
+  font-size: large;
+  border-radius: 3px;
+  &:hover {
+    background-color: white;
+  }
+`;
+
 const ListForBar = ({ listIndex, bars, boardIndex }: ListForBarProps) => {
   const values = bars;
   const [listName, setListName] = useRecoilState(
     ListNameSelector({ boardIndex, listIndex })
   );
+  const deleteList = useSetRecoilState(listsSelector({ boardIndex }));
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setListName(event.currentTarget.value);
+  };
+
+  const onDeleteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const targetIndex = Number(event.currentTarget.value);
+    deleteList(targetIndex);
   };
   return (
     <Draggable
@@ -77,6 +91,9 @@ const ListForBar = ({ listIndex, bars, boardIndex }: ListForBarProps) => {
       {(provided) => (
         <DragSpace {...provided.draggableProps} ref={provided.innerRef}>
           <HandleBox {...provided.dragHandleProps}>
+            <Button value={listIndex} onClick={onDeleteClick}>
+              🗑
+            </Button>
             <TitleWrapper>
               <Input value={listName} onChange={onChange} />
               <FormCreatingBar boardIndex={boardIndex} listIndex={listIndex} />

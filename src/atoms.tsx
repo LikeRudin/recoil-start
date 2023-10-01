@@ -98,13 +98,25 @@ export const boardNameSelector = selectorFamily<string, { boardIndex: number }>(
   }
 );
 
-export const listsSelector = selectorFamily<ILists[], { boardIndex: number }>({
+export const listsSelector = selectorFamily<
+  ILists[] | number,
+  { boardIndex: number }
+>({
   key: "lists",
   get:
     ({ boardIndex }) =>
     ({ get }) => {
       const data = get(dataState);
       return data[boardIndex]["lists"];
+    },
+  set:
+    ({ boardIndex }) =>
+    ({ set }, targetIndex) => {
+      set(dataState, (oldData) => {
+        const newData = JSON.parse(JSON.stringify(oldData));
+        newData[boardIndex].lists.splice(targetIndex, 1);
+        return newData;
+      });
     },
 });
 
