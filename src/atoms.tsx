@@ -86,3 +86,39 @@ export const listsSelector = selectorFamily<ILists[], { boardIndex: number }>({
       return data[boardIndex]["lists"];
     },
 });
+
+export const barsSelector = selectorFamily<
+  ILists["bars"],
+  { boardIndex: number; listIndex: number }
+>({
+  key: "list",
+  get:
+    ({ boardIndex, listIndex }) =>
+    ({ get }) => {
+      const data = get(dataState);
+      return data[boardIndex].lists[listIndex].bars;
+    },
+});
+
+export const barTextSelector = selectorFamily<
+  string,
+  { boardIndex: number; listIndex: number; barIndex: number }
+>({
+  key: "bar",
+  get:
+    ({ boardIndex, listIndex, barIndex }) =>
+    ({ get }) => {
+      const data = get(dataState);
+      const barText = data[boardIndex].lists[listIndex].bars[barIndex].text;
+      return barText;
+    },
+  set:
+    ({ boardIndex, listIndex, barIndex }) =>
+    ({ set }, newText) => {
+      set(dataState, (data) => {
+        const newData = JSON.parse(JSON.stringify(data));
+        newData[boardIndex].lists[listIndex].bars[barIndex].text = newText;
+        return newData;
+      });
+    },
+});
