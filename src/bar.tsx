@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
-import React, { memo, useEffect } from "react";
+import React, { memo } from "react";
 import { useRecoilState } from "recoil";
 import { barTextSelector } from "./atoms";
 

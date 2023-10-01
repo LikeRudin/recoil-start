@@ -35,12 +35,22 @@ const DropSpace = styled.div<IDropSpace>`
       : "transparent"};
 `;
 
+const HandleBox = styled.div`
+  width: 80%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+`;
+
+const Span = styled.span``;
+
 const TitleWrapper = styled.div`
   margin-top: 4.5%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  margin-left: 5px;
 `;
 
 const Input = styled.input`
@@ -64,10 +74,13 @@ const ListForBar = ({ listIndex, bars, boardIndex }: ListForBarProps) => {
     >
       {(provided) => (
         <DragSpace {...provided.draggableProps} ref={provided.innerRef}>
-          <TitleWrapper {...provided.dragHandleProps}>
-            <Input value={listName} onChange={onChange} />
-            <FormCreatingBar boardIndex={boardIndex} listIndex={listIndex} />
-          </TitleWrapper>
+          <HandleBox {...provided.dragHandleProps}>
+            <TitleWrapper>
+              <Input value={listName} onChange={onChange} />
+              <FormCreatingBar boardIndex={boardIndex} listIndex={listIndex} />
+            </TitleWrapper>
+            <Span>👋</Span>
+          </HandleBox>
 
           <Droppable
             droppableId={`list-${boardIndex}-${listIndex}`}

@@ -77,6 +77,27 @@ export const boardsSelector = selector({
   },
 });
 
+export const boardNameSelector = selectorFamily<string, { boardIndex: number }>(
+  {
+    key: "boardName",
+    get:
+      ({ boardIndex }) =>
+      ({ get }) => {
+        const data = get(dataState);
+        return data[boardIndex].name;
+      },
+    set:
+      ({ boardIndex }) =>
+      ({ set }, newName) => {
+        set(dataState, (oldData) => {
+          const newData = JSON.parse(JSON.stringify(oldData));
+          newData[boardIndex].name = newName;
+          return newData;
+        });
+      },
+  }
+);
+
 export const listsSelector = selectorFamily<ILists[], { boardIndex: number }>({
   key: "lists",
   get:

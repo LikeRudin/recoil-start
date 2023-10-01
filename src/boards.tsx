@@ -115,8 +115,8 @@ const Boards = () => {
               {...provided.droppableProps}
               isDraggingOver={snapshot.isDraggingOver}
             >
-              {boards.map((name, index) => {
-                return <BoardForList boardName={name} boardIndex={index} />;
+              {boards.map((_, index) => {
+                return <BoardForList boardIndex={index} />;
               })}
               {provided.placeholder}
             </DropSpace>

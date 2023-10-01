@@ -1,12 +1,11 @@
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import ListForBar from "./list-for-bar";
-import { useRecoilValue } from "recoil";
-import { listsSelector } from "./atoms";
+import { useRecoilValue, useRecoilState } from "recoil";
+import { boardNameSelector, listsSelector } from "./atoms";
 import { memo } from "react";
 import FormCreatingList from "./components/create-list";
 interface BoardForListProps {
-  boardName: string;
   boardIndex: number;
 }
 
@@ -59,23 +58,28 @@ const Input = styled.input`
   margin-right: 5%;
 `;
 
-const BoardForList = ({ boardName, boardIndex }: BoardForListProps) => {
+const BoardForList = ({ boardIndex }: BoardForListProps) => {
   const lists = useRecoilValue(
     listsSelector({
       boardIndex,
     })
   );
+  const [boardName, setBoardName] = useRecoilState(
+    boardNameSelector({ boardIndex })
+  );
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setBoardName(event.currentTarget.value);
+  };
 
   return (
     <Draggable
       draggableId={`board-${boardName}-${boardIndex}`}
       index={boardIndex}
-      key={`board-${boardName}`}
     >
       {(provided) => (
         <DragSpace ref={provided.innerRef} {...provided.draggableProps}>
           <TitleWrapper {...provided.dragHandleProps}>
-            <Input value={boardName} />
+            <Input value={boardName} onChange={onChange} />
             <FormCreatingList boardIndex={boardIndex} />
           </TitleWrapper>
           <Droppable
