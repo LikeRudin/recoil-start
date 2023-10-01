@@ -21,7 +21,7 @@ export const dataState = atom<IBoard[]>({
   key: "datas",
   default: [
     {
-      name: "오늘",
+      name: `내일`,
       id: 2312315,
       lists: [
         { name: "TODO", id: 1234567, bars: [{ id: 1, text: "코딩" }] },
@@ -44,7 +44,7 @@ export const dataState = atom<IBoard[]>({
       ],
     },
     {
-      name: "내일",
+      name: `${new Date().getMonth() + 1} 월 ${new Date().getDate()}일`,
       id: 1235904924,
       lists: [
         { name: "TODO", id: 9876543, bars: [{ id: 1, text: "코딩" }] },
@@ -73,8 +73,18 @@ export const boardsSelector = selector({
   key: "boards",
   get: ({ get }) => {
     const data = get(dataState);
-    return data.map((board) => board["name"]);
+    return data;
   },
+});
+
+export const boardSelector = selectorFamily<IBoard, { boardIndex: number }>({
+  key: "board",
+  get:
+    ({ boardIndex }) =>
+    ({ get }) => {
+      const data = get(dataState);
+      return data[boardIndex];
+    },
 });
 
 export const boardNameSelector = selectorFamily<string, { boardIndex: number }>(
@@ -105,7 +115,7 @@ export const listsSelector = selectorFamily<
   key: "lists",
   get:
     ({ boardIndex }) =>
-    ({ get }) => {
+    ({ get }): ILists[] => {
       const data = get(dataState);
       return data[boardIndex]["lists"];
     },

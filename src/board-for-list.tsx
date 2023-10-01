@@ -1,33 +1,38 @@
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import ListForBar from "./list-for-bar";
-import { useRecoilValue, useRecoilState } from "recoil";
-import { boardNameSelector, listsSelector } from "./atoms";
-import { memo } from "react";
+import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil";
+import { ILists, boardNameSelector, dataState, listsSelector } from "./atoms";
+import React, { memo } from "react";
 import FormCreatingList from "./components/create-list";
 interface BoardForListProps {
   boardIndex: number;
 }
+interface IDraggingCondition {
+  isDraggingOver: boolean;
+  draggingFromThis: boolean;
+}
 
-const DragSpace = styled.div`
+const DragSpace = styled.div<IDraggingCondition>`
   width: 95%;
   height: 30%;
   overflow-x: auto;
+  border-radius: 40px;
+  background-color: ${(props) =>
+    props.isDraggingOver ? "gray" : props.draggingFromThis ? "red" : "#9EDDFF"};
+  transition: background-color 0.2s ease-in-out;
+
   &::-webkit-scrollbar {
     display: none;
   }
 `;
 
-interface IDropSpace {
-  isDraggingOver: boolean;
-  draggingFromThis: boolean;
-}
-const DropSpace = styled.div<IDropSpace>`
+const DropSpace = styled.div<IDraggingCondition>`
   display: flex;
   justify-content: flex-start;
   overflow-x: auto;
 
-  width: 90%;
+  width: 100%;
   height: 100%;
   padding: 20px;
   border-radius: 30px;
@@ -44,10 +49,12 @@ const DropSpace = styled.div<IDropSpace>`
 `;
 
 const TitleWrapper = styled.div`
-  margin-top: 4.5%;
+  margin-top: 3%;
   display: flex;
+  width: 90%;
   justify-content: flex-start;
   align-items: center;
+  margin-bottom: 2%;
 `;
 
 const Input = styled.input`
@@ -57,18 +64,42 @@ const Input = styled.input`
   height: 20%;
   margin-right: 5%;
 `;
+const Button = styled.button`
+  font-size: xx-large;
+  width: 50px;
+  height: 50px;
+  border-radius: 3px;
+  &:hover {
+    background-color: white;
+  }
+  margin: 0px 30px;
+`;
+const Span = styled.span`
+  font-size: xxx-large;
+  margin: 0px 100px;
+`;
 
 const BoardForList = ({ boardIndex }: BoardForListProps) => {
   const lists = useRecoilValue(
     listsSelector({
       boardIndex,
     })
-  );
+  ) as ILists[];
+
+  const setData = useSetRecoilState(dataState);
   const [boardName, setBoardName] = useRecoilState(
     boardNameSelector({ boardIndex })
   );
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setBoardName(event.currentTarget.value);
+  };
+  const onDeleteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const targetIndex = Number(event.currentTarget.value);
+    setData((oldData) => {
+      const newData = JSON.parse(JSON.stringify(oldData));
+      newData.splice(targetIndex, 1);
+      return newData;
+    });
   };
 
   return (
@@ -76,12 +107,23 @@ const BoardForList = ({ boardIndex }: BoardForListProps) => {
       draggableId={`board-${boardName}-${boardIndex}`}
       index={boardIndex}
     >
-      {(provided) => (
-        <DragSpace ref={provided.innerRef} {...provided.draggableProps}>
+      {(provided, snapshot) => (
+        <DragSpace
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          isDraggingOver={!!snapshot.draggingOver}
+          draggingFromThis={snapshot.isDragging}
+        >
           <TitleWrapper {...provided.dragHandleProps}>
+            <Button value={boardIndex} onClick={onDeleteClick}>
+              🗑
+            </Button>
             <Input value={boardName} onChange={onChange} />
             <FormCreatingList boardIndex={boardIndex} />
+
+            <Span>👋</Span>
           </TitleWrapper>
+
           <Droppable
             droppableId={`board-${boardIndex}`}
             direction="horizontal"
