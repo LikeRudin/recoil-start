@@ -54,13 +54,7 @@ const ListForBar = ({
   bars,
   boardIndex,
 }: ListForBarProps) => {
-  const [listTitle, setListTitle] = useState(listName);
   const values = bars;
-  useEffect(() => {
-    if (listTitle !== listName) {
-      setListTitle(listTitle);
-    }
-  });
   return (
     <Draggable
       draggableId={`list-${boardIndex}-${listIndex}-${listIndex}`}
