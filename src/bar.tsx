@@ -3,7 +3,7 @@ import { Draggable } from "react-beautiful-dnd";
 import React, { memo } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
-import { barTextSelector, barsSelector } from "./atoms";
+import { barTextSelector, barsSelector } from "./atoms.tsx";
 
 interface BarProps {
   id: number;

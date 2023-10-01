@@ -2,7 +2,7 @@ import { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
 
 import styled from "styled-components";
-import Boards from "./boards";
+import Boards from "./boards.tsx";
 const GlobalStyle = createGlobalStyle`
 ${reset}`;
 

@@ -2,10 +2,10 @@ import { DragDropContext, DropResult, Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useEffect } from "react";
-import BoardForList from "./board-for-list";
-import FormCreatingBoard from "./components/create-board";
+import BoardForList from "./board-for-list.tsx";
+import FormCreatingBoard from "./components/create-board.tsx";
 
-import { dataState, boardsSelector, saveDatas, loadDatas } from "./atoms";
+import { dataState, boardsSelector, saveDatas, loadDatas } from "./atoms.tsx";
 
 const Wrapper = styled.div`
   display: flex;

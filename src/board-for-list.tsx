@@ -3,8 +3,8 @@ import styled from "styled-components";
 import React, { memo } from "react";
 import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil";
 
-import FormCreatingList from "./components/create-list";
-import ListForBar from "./list-for-bar";
+import FormCreatingList from "./components/create-list.tsx";
+import ListForBar from "./list-for-bar.tsx";
 
 import {
   ILists,

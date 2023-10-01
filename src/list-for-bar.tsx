@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { Droppable, Draggable } from "react-beautiful-dnd";
-import Bar from "./bar";
-import React, { memo } from "react";
-import FormCreatingBar from "./components/create-bar";
-import { IBar, ListNameSelector, listsSelector } from "./atoms";
 import { useRecoilState, useSetRecoilState } from "recoil";
+import React, { memo } from "react";
+import Bar from "./bar.tsx";
+import FormCreatingBar from "./components/create-bar.tsx";
+import { IBar, ListNameSelector, listsSelector } from "./atoms.tsx";
 interface ListForBarProps {
   bars: any[];
   listIndex: number;
