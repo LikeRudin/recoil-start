@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
-import { ILists, dataState } from "../atoms";
+import { ILists, dataState, saveDatas } from "../atoms";
 
 interface FormCreatingBoardProps {
   boardIndex: number;
@@ -19,9 +19,10 @@ const FormCreatingList = ({ boardIndex }: FormCreatingBoardProps) => {
   const { register, setValue, handleSubmit } = useForm();
   const onValid = ({ name }: ILists) => {
     setDatas((oldDatas) => {
-      const newDatas = JSON.parse(JSON.stringify(oldDatas));
-      newDatas[boardIndex]["lists"].unshift({ name, id: Date.now(), bars: [] });
-      return newDatas;
+      const newData = JSON.parse(JSON.stringify(oldDatas));
+      newData[boardIndex]["lists"].unshift({ name, id: Date.now(), bars: [] });
+      saveDatas(newData);
+      return newData;
     });
     setValue("name", "");
   };

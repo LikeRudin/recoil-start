@@ -102,6 +102,7 @@ export const boardNameSelector = selectorFamily<string, { boardIndex: number }>(
         set(dataState, (oldData) => {
           const newData = JSON.parse(JSON.stringify(oldData));
           newData[boardIndex].name = newName;
+          saveDatas(newData);
           return newData;
         });
       },
@@ -125,6 +126,7 @@ export const listsSelector = selectorFamily<
       set(dataState, (oldData) => {
         const newData = JSON.parse(JSON.stringify(oldData));
         newData[boardIndex].lists.splice(targetIndex, 1);
+        saveDatas(newData);
         return newData;
       });
     },
@@ -147,6 +149,7 @@ export const ListNameSelector = selectorFamily<
       set(dataState, (oldData) => {
         const newData = JSON.parse(JSON.stringify(oldData));
         newData[boardIndex].lists[listIndex].name = newName;
+        saveDatas(newData);
         return newData;
       });
     },
@@ -169,6 +172,7 @@ export const barsSelector = selectorFamily<
       set(dataState, (data) => {
         const newData = JSON.parse(JSON.stringify(data));
         newData[boardIndex].lists[listIndex].bars.splice(targetIndex, 1);
+        saveDatas(newData);
         return newData;
       });
     },
@@ -192,7 +196,17 @@ export const barTextSelector = selectorFamily<
       set(dataState, (data) => {
         const newData = JSON.parse(JSON.stringify(data));
         newData[boardIndex].lists[listIndex].bars[barIndex].text = newText;
+        saveDatas(newData);
         return newData;
       });
     },
 });
+export const loadDatas = (): IBoard[] | null => {
+  const dataString = localStorage.getItem("datas") || "null";
+  const datas = JSON.parse(dataString);
+  return datas;
+};
+
+export const saveDatas = (datas: IBoard[]) => {
+  localStorage.setItem("datas", JSON.stringify(datas));
+};

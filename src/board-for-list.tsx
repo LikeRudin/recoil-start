@@ -1,10 +1,19 @@
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
-import ListForBar from "./list-for-bar";
-import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil";
-import { ILists, boardNameSelector, dataState, listsSelector } from "./atoms";
 import React, { memo } from "react";
+import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil";
+
 import FormCreatingList from "./components/create-list";
+import ListForBar from "./list-for-bar";
+
+import {
+  ILists,
+  boardNameSelector,
+  dataState,
+  listsSelector,
+  saveDatas,
+} from "./atoms";
+
 interface BoardForListProps {
   boardIndex: number;
 }
@@ -98,6 +107,7 @@ const BoardForList = ({ boardIndex }: BoardForListProps) => {
     setData((oldData) => {
       const newData = JSON.parse(JSON.stringify(oldData));
       newData.splice(targetIndex, 1);
+      saveDatas(newData);
       return newData;
     });
   };

@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
 import React, { memo } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
+
 import { barTextSelector, barsSelector } from "./atoms";
 
 interface BarProps {
@@ -55,6 +56,7 @@ const Bar = ({ id, boardIndex, listIndex, barIndex }: BarProps) => {
     barTextSelector({ boardIndex, listIndex, barIndex })
   );
   const deleteBars = useSetRecoilState(barsSelector({ boardIndex, listIndex }));
+
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setBarText(event.currentTarget.value);
   };

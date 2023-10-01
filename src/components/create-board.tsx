@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
-import { IBoard, dataState } from "../atoms";
+
+import { IBoard, dataState, saveDatas } from "../atoms";
 
 const Form = styled.form`
   display: flex;
@@ -21,6 +22,7 @@ const FormCreatingBoard = () => {
   const onValid = ({ name }: IBoard) => {
     setData((oldData) => {
       const newData = [{ name: name, id: Date.now(), lists: [] }, ...oldData];
+      saveDatas(newData);
       return newData;
     });
     setValue("name", "");

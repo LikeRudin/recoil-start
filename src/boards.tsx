@@ -1,9 +1,11 @@
 import { DragDropContext, DropResult, Droppable } from "react-beautiful-dnd";
-import BoardForList from "./board-for-list";
-import { dataState, boardsSelector } from "./atoms";
-import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useEffect } from "react";
+import BoardForList from "./board-for-list";
 import FormCreatingBoard from "./components/create-board";
+
+import { dataState, boardsSelector, saveDatas, loadDatas } from "./atoms";
 
 const Wrapper = styled.div`
   display: flex;
@@ -47,11 +49,12 @@ const Boards = () => {
 
     if (srcAddress.length === 1) {
       setDatas((oldDatas) => {
-        const newDatas = [...oldDatas];
-        const [target] = newDatas.splice(sourceIndex, 1);
-        newDatas.splice(destinationIndex, 0, target);
-        console.log(newDatas);
-        return newDatas;
+        const newData = [...oldDatas];
+        const [target] = newData.splice(sourceIndex, 1);
+        newData.splice(destinationIndex, 0, target);
+        console.log(newData);
+        saveDatas(newData);
+        return newData;
       });
       return;
     }
@@ -60,14 +63,15 @@ const Boards = () => {
       const srcBoardIndex = srcAddress[1];
       console.log("리스트 이동");
       setDatas((oldDatas) => {
-        const newDatas = JSON.parse(JSON.stringify(oldDatas));
-        const [target] = newDatas[+srcBoardIndex]["lists"].splice(
+        const newData = JSON.parse(JSON.stringify(oldDatas));
+        const [target] = newData[+srcBoardIndex]["lists"].splice(
           sourceIndex,
           1
         );
-        newDatas[+distBoardIndex]["lists"].splice(destinationIndex, 0, target);
-        console.log(newDatas);
-        return newDatas;
+        newData[+distBoardIndex]["lists"].splice(destinationIndex, 0, target);
+        console.log(newData);
+        saveDatas(newData);
+        return newData;
       });
       return;
     }
@@ -75,23 +79,23 @@ const Boards = () => {
       const [distBoardIndex, distListIndex] = distAddress.slice(1);
       const [srcBoardIndex, srcListIndex] = srcAddress.slice(1);
       setDatas((oldDatas) => {
-        const newDatas = JSON.parse(JSON.stringify(oldDatas));
+        const newData = JSON.parse(JSON.stringify(oldDatas));
         if (
-          newDatas[srcBoardIndex] &&
-          newDatas[srcBoardIndex]["lists"] &&
-          newDatas[srcBoardIndex]["lists"][srcListIndex] &&
-          newDatas[srcBoardIndex]["lists"][srcListIndex]["bars"]
+          newData[srcBoardIndex] &&
+          newData[srcBoardIndex]["lists"] &&
+          newData[srcBoardIndex]["lists"][srcListIndex] &&
+          newData[srcBoardIndex]["lists"][srcListIndex]["bars"]
         ) {
-          const [target] = newDatas[srcBoardIndex]["lists"][srcListIndex][
+          const [target] = newData[srcBoardIndex]["lists"][srcListIndex][
             "bars"
           ].splice(sourceIndex, 1);
           if (
-            newDatas[distBoardIndex] &&
-            newDatas[distBoardIndex]["lists"] &&
-            newDatas[distBoardIndex]["lists"][distListIndex] &&
-            newDatas[distBoardIndex]["lists"][distListIndex]["bars"]
+            newData[distBoardIndex] &&
+            newData[distBoardIndex]["lists"] &&
+            newData[distBoardIndex]["lists"][distListIndex] &&
+            newData[distBoardIndex]["lists"][distListIndex]["bars"]
           ) {
-            newDatas[distBoardIndex]["lists"][distListIndex]["bars"].splice(
+            newData[distBoardIndex]["lists"][distListIndex]["bars"].splice(
               destinationIndex,
               0,
               target
@@ -99,11 +103,20 @@ const Boards = () => {
           }
         }
         console.log("요소이동");
-        console.log(newDatas);
-        return newDatas;
+        console.log(newData);
+        saveDatas(newData);
+        return newData;
       });
     }
   };
+
+  useEffect(() => {
+    const datas = loadDatas();
+    if (datas) {
+      setDatas(datas);
+    }
+  }, []);
+
   return (
     <Wrapper>
       <FormCreatingBoard />

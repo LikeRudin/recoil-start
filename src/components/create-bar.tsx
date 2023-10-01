@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
-import { IBar, dataState } from "../atoms";
+import { IBar, dataState, saveDatas } from "../atoms";
 
 interface FormCreatingBarProps {
   boardIndex: number;
@@ -16,12 +16,13 @@ const FormCreatingBar = ({ boardIndex, listIndex }: FormCreatingBarProps) => {
   const { register, setValue, handleSubmit } = useForm();
   const onValid = ({ text }: IBar) => {
     setDatas((oldDatas) => {
-      const newDatas = JSON.parse(JSON.stringify(oldDatas));
-      newDatas[boardIndex]["lists"][listIndex]["bars"].unshift({
+      const newData = JSON.parse(JSON.stringify(oldDatas));
+      newData[boardIndex]["lists"][listIndex]["bars"].unshift({
         text,
         id: Date.now(),
       });
-      return newDatas;
+      saveDatas(newData);
+      return newData;
     });
     setValue("text", "");
   };

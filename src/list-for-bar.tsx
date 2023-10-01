@@ -43,7 +43,7 @@ const HandleBox = styled.div`
 `;
 
 const Span = styled.span`
-  margin-left: 25px;
+  margin-left: 5px;
 `;
 
 const TitleWrapper = styled.div`
